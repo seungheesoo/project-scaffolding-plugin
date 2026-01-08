@@ -1,0 +1,21 @@
+{
+  "name": "project-scaffolding",
+  "description": "풀스택 프로젝트 디렉토리 구조를 자동으로 생성하는 플러그인",
+  "version": "1.0.0",
+  "author": {
+    "name": "project-scaffolding"
+  },
+  "license": "MIT",
+  "keywords": [
+    "scaffolding",
+    "fullstack",
+    "project-structure",
+    "react",
+    "nextjs",
+    "vue",
+    "nodejs",
+    "java",
+    "python",
+    "typescript"
+  ]
+}
