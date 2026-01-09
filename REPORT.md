@@ -10,7 +10,7 @@
 |----------|---------|-------|
 | React (Vite) | Node.js (Express) | Docker |
 | Next.js | Java (Spring Boot) | GitLab CI |
-| Vue 3 (Vite) | Python (FastAPI) | |
+| | Python (FastAPI) | |
 
 ## 주요 기능
 
@@ -90,7 +90,7 @@ claude --plugin-dir ./project-scaffolding-plugin
        └── 현재 폴더 + 파일 존재 → "병합" / "취소" 질문
 
 2. 스택 선택 (병합 모드: 기존 폴더 자동 건너뛰기)
-   ├── Frontend: React (Vite) / Next.js / Vue 3 (Vite) / 사용 안함
+   ├── Frontend: React (Vite) / Next.js / 사용 안함
    ├── Backend: Node.js (Express) / Java (Spring Boot) / Python (FastAPI) / 사용 안함
    └── Infra: Docker / GitLab CI (다중 선택)
 
@@ -116,8 +116,8 @@ claude --plugin-dir ./project-scaffolding-plugin
 ## 진행 예정 사항
 
 ### 1단계: 기본 컨벤션
-- [ ] 역할 별 코드 컨벤션 정의 (`.claude/role/{workspace}.md`에 추가)
-- [ ] 각 스택별 코드 예시 작성 (boilerplate 파일 내용)
+- [x] 역할 별 코드 컨벤션 정의 (`.claude/role/{workspace}.md`에 추가)
+- [x] 각 스택별 코드 예시 작성 (boilerplate 파일 내용)
 
 ### 2단계: 상세 코딩 가이드라인 (`.claude/conventions/`)
 - [ ] 네이밍 규칙 (변수, 함수, 파일, 컴포넌트/엔티티/모델)
