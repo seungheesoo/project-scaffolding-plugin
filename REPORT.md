@@ -28,9 +28,12 @@
 
 | 항목 | 결정 | 이유 |
 |------|------|------|
+| Frontend 아키텍처 | Feature-Sliced Design (FSD) | 확장성, 모듈 독립성 |
+| UI 시스템 | shadcn/ui + Tailwind CSS | 커스터마이징 용이, 경량 |
+| 테마 | CSS 변수 기반 (HSL) | 런타임 테마 전환 지원 |
+| MSW 상태 | Backend 선택 시 disabled | 실제 API 우선, 필요 시 활성화 |
 | role 파일 위치 | `.claude/role/` | Claude 설정 파일 일관성 |
 | 병합 모드 | 기존 폴더에 파일 있으면 자동 건너뛰기 | 프레임워크 판별 불가, 단순화 |
-| workspace 정보 유지 | CLAUDE.md Summary instructions | 컨텍스트 압축 시 손실 방지 |
 | Infra 처리 | 항목별 개별 처리 | Docker/GitLab CI 독립적 존재 가능 |
 
 ## 생성되는 구조
@@ -58,14 +61,15 @@
 ```
 project-scaffolding-plugin/
 ├── .claude-plugin/
-│   └── plugin.json         # 플러그인 메타데이터
+│   └── plugin.json             # 플러그인 메타데이터
 ├── commands/
-│   ├── scaffold.md         # 프로젝트 생성 명령 (225줄)
-│   └── workspace.md        # workspace 선택 명령 (24줄)
-├── skills/
-│   └── project-scaffolding/
-│       └── SKILL.md        # 자연어 트리거 (17줄)
-└── README.md               # 사용자 문서
+│   ├── scaffold.md             # 프로젝트 생성 명령 (~303줄)
+│   ├── workspace.md            # workspace 선택 명령 (24줄)
+│   └── _templates/
+│       ├── boilerplate/        # 스택별 템플릿 (9개)
+│       ├── role/               # workspace 역할 (3개)
+│       └── themes/             # 테마 (1개)
+└── README.md
 ```
 
 ## 사용 방법
@@ -91,7 +95,9 @@ claude --plugin-dir ./project-scaffolding-plugin
 
 2. 스택 선택 (병합 모드: 기존 폴더 자동 건너뛰기)
    ├── Frontend: React (Vite) / Next.js / 사용 안함
+   ├── Theme: shadcn/ui Neutral / Lime-Cyan Dark (Frontend 선택 시)
    ├── Backend: Node.js (Express) / Java (Spring Boot) / Python (FastAPI) / 사용 안함
+   ├── MSW: 설정 / 사용 안함 (Frontend 선택 시)
    └── Infra: Docker / GitLab CI (다중 선택)
 
 3. 구조 생성 및 완료
@@ -118,6 +124,10 @@ claude --plugin-dir ./project-scaffolding-plugin
 ### 1단계: 기본 컨벤션
 - [x] 역할 별 코드 컨벤션 정의 (`.claude/role/{workspace}.md`에 추가)
 - [x] 각 스택별 코드 예시 작성 (boilerplate 파일 내용)
+- [x] FSD 아키텍처 가이드 (frontend.md)
+- [x] shadcn/ui 통합 (components.json, cn 함수)
+- [x] 테마 시스템 (shadcn/ui Neutral, Lime-Cyan Dark)
+- [x] MSW (Mock Service Worker) 설정
 
 ### 2단계: 상세 코딩 가이드라인 (`.claude/conventions/`)
 - [ ] 네이밍 규칙 (변수, 함수, 파일, 컴포넌트/엔티티/모델)
