@@ -7,8 +7,9 @@ argument-hint: [project-name]
 - Frontend: TypeScript 필수
 - Git: GitLab 사용
 - 프로젝트 이름: kebab-case
+- 템플릿 경로: `@_templates/...` 형식으로 참조 (플러그인 번들 파일, 사용자 PC 탐색 금지)
 - 폴더 구조 생성: boilerplate 템플릿 파일 내용을 그대로 복사하여 생성
-- 파일 존재 판단: 숨김 파일(`.gitignore` 등) 제외, 실제 소스 파일 1개 이상 존재 시 "파일 있음"으로 판단
+- 파일 존재 판단 (대상 폴더만 해당): 숨김 파일(`.gitignore` 등) 제외, 실제 소스 파일 1개 이상 존재 시 "파일 있음"으로 판단
 - 소스 파일 정의: `.ts`, `.tsx`, `.js`, `.jsx`, `.java`, `.py`, `.json`, `.yml`, `.yaml`, `.gradle`, `.xml` 확장자
 
 ### 치환 규칙
@@ -139,6 +140,7 @@ questions:
 ```
 {project}/
 ├── .claude/role/root.md
+├── .claude/style-guide.md      # Frontend 선택 시
 ├── config/.env.example
 ├── docs/README.md
 ├── .gitignore
@@ -151,8 +153,6 @@ questions:
 ---
 
 ## 템플릿 파일 참조
-
-선택된 스택에 따라 해당 템플릿 파일을 읽고, 파일 내용을 그대로 생성합니다.
 
 ### 템플릿 파일 해석 규칙
 
@@ -176,14 +176,14 @@ questions:
 ### role 파일
 | 생성 대상 | 템플릿 파일 | 생성 조건 |
 |----------|------------|----------|
-| `.claude/role/root.md` | `_templates/role/root.md` | 항상 |
-| `.claude/role/frontend.md` | `_templates/role/frontend.md` | Frontend 선택 또는 `frontend/` 존재 |
-| `.claude/role/backend.md` | `_templates/role/backend.md` | Backend 선택 또는 `backend/` 존재 |
+| `.claude/role/root.md` | `@_templates/role/root.md` | 항상 |
+| `.claude/role/frontend.md` | `@_templates/role/frontend.md` | Frontend 선택 또는 `frontend/` 존재 |
+| `.claude/role/backend.md` | `@_templates/role/backend.md` | Backend 선택 또는 `backend/` 존재 |
 
 **참고**: role 파일은 병합 모드에서도 항상 덮어씁니다 (컨벤션 동기화)
 
 ### 공통 파일
-`_templates/boilerplate/common.md` 파일에서 각 `## 파일경로` 섹션의 코드 블록 추출:
+`@_templates/boilerplate/common.md` 파일에서 각 `## 파일경로` 섹션의 코드 블록 추출:
 | 생성 대상 | 템플릿 섹션 헤딩 |
 |----------|----------------|
 | `config/.env.example` | `## config/.env.example` |
@@ -195,21 +195,23 @@ questions:
 ### Frontend boilerplate
 | 선택 | 템플릿 파일 |
 |------|------------|
-| React (Vite) | `_templates/boilerplate/react.md` |
-| Next.js | `_templates/boilerplate/nextjs.md` |
+| React (Vite) | `@_templates/boilerplate/react.md` |
+| Next.js | `@_templates/boilerplate/nextjs.md` |
 
 ### 테마 적용 규칙
 
 **테마 파일 매핑**:
 | 테마 선택 | 템플릿 파일 |
 |----------|------------|
-| shadcn/ui Neutral | 없음 (boilerplate 그대로 사용) |
-| Lime-Cyan Dark | `_templates/themes/lime-cyan-dark.md` |
+| shadcn/ui Neutral | `@_templates/themes/neutral.md` |
+| Lime-Cyan Dark | `@_templates/themes/lime-cyan-dark.md` |
 
-**테마 적용 방법** (shadcn/ui Neutral 제외):
-1. Frontend boilerplate 전체 생성
-2. `global.css`의 첫 번째 `@layer base { ... }` 블록 전체를 테마의 `## CSS 변수` 섹션 내용으로 **교체**
-3. 테마에 `## Tailwind 확장 색상` 섹션이 있으면, `tailwind.config.ts`의 `theme.extend.colors`에서 `destructive` 블록 닫는 `},` 바로 다음 줄에 해당 색상 **삽입**
+**CSS 변수 적용** (테마 파일에 `## CSS 변수` 섹션이 있는 경우만):
+1. `global.css` 생성 시:
+   - boilerplate의 `@tailwind` 지시문 3줄 유지
+   - 첫 번째 `@layer base` 블록 (`:root` 포함, CSS 변수 정의) → 테마의 `## CSS 변수` 내용으로 **교체**
+   - 두 번째 `@layer base` 블록 (`*`, `body` 포함, 기본 스타일) → 그대로 유지
+2. `tailwind.config.ts` 생성 시, `## Tailwind 확장 색상` 섹션이 있으면 `colors` 객체 끝에 **추가**
 
 **global.css 경로** (프레임워크별):
 | Frontend | global.css 경로 |
@@ -219,8 +221,16 @@ questions:
 
 **병합 모드**: 기존 `frontend/`가 있으면 테마 적용 안함 (기존 스타일 유지)
 
+**스타일 가이드 생성**:
+- 조건: Frontend 선택 + 테마 파일에 `## 스타일 가이드` 섹션 존재
+- 생성 파일: `.claude/style-guide.md`
+- 내용: 테마 파일의 `## 스타일 가이드` 헤딩(포함)부터 파일 끝까지 복사
+- **병합 모드**: 기존 `frontend/`가 있으면 생성 안함 (기존 스타일 유지)
+
 ### MSW boilerplate
-`_templates/boilerplate/msw.md`에서 Frontend 선택에 따라 해당 파일 생성:
+`@_templates/boilerplate/msw.md`에서 Frontend 선택에 따라 해당 파일 생성:
+
+**병합 모드**: 기존 `frontend/`가 있으면 MSW 질문 자체를 건너뛰므로 생성 안함
 
 **MSW 설정 선택 시**:
 | 생성 대상 | 템플릿 섹션 헤딩 |
@@ -237,19 +247,31 @@ questions:
 | Next.js + Backend 사용 안함 | `## frontend/src/mocks/index.ts (Next.js)` |
 | Next.js + Backend 선택 | `## frontend/src/mocks/index.ts (Next.js, disabled)` |
 
-**주의**: MSW 초기화 코드는 사용자가 직접 추가해야 함 (entry 파일에 `initMocks()` 호출)
+**Entry 파일 덮어쓰기**:
+| 조건 | 생성할 섹션 | 덮어쓸 파일 |
+|-----|-----------|------------|
+| React + Backend 사용 안함 | `## frontend/src/main.tsx (React, MSW)` | `frontend/src/main.tsx` |
+| React + Backend 선택 | `## frontend/src/main.tsx (React, MSW, disabled)` | `frontend/src/main.tsx` |
+| Next.js + Backend 사용 안함 | `## frontend/app/layout.tsx (Next.js, MSW)` | `frontend/app/layout.tsx` |
+| Next.js + Backend 선택 | `## frontend/app/layout.tsx (Next.js, MSW, disabled)` | `frontend/app/layout.tsx` |
+
+**Next.js 추가 생성** (MSWProvider 컴포넌트):
+| 조건 | 생성할 섹션 |
+|-----|-----------|
+| Next.js + Backend 사용 안함 | `## frontend/app/providers/MSWProvider.tsx (Next.js, MSW)` |
+| Next.js + Backend 선택 | `## frontend/app/providers/MSWProvider.tsx (Next.js, MSW, disabled)` |
 
 ### Backend boilerplate
 | 선택 | 템플릿 파일 |
 |------|------------|
-| Node.js (Express) | `_templates/boilerplate/express.md` |
-| Java (Spring Boot) | `_templates/boilerplate/spring.md` |
-| Python (FastAPI) | `_templates/boilerplate/fastapi.md` |
+| Node.js (Express) | `@_templates/boilerplate/express.md` |
+| Java (Spring Boot) | `@_templates/boilerplate/spring.md` |
+| Python (FastAPI) | `@_templates/boilerplate/fastapi.md` |
 
 ### Infra boilerplate
 
 #### Docker 파일 선택 규칙
-`_templates/boilerplate/docker.md`에서 스택 선택에 따라 해당 Dockerfile 생성:
+`@_templates/boilerplate/docker.md`에서 스택 선택에 따라 해당 Dockerfile 생성:
 
 | Frontend 선택 | 생성할 섹션 |
 |--------------|-----------|
@@ -264,18 +286,22 @@ questions:
 | Python (FastAPI) | `## docker/Dockerfile.backend (FastAPI 선택 시)` |
 | 기존 유지 / 사용 안함 | 생성 안함 |
 
-**docker-compose.yml 선택 규칙**:
-| 조건 | 생성할 섹션 |
-|-----|-----------|
-| Frontend + Backend 모두 선택 | `## docker-compose.yml (Frontend + Backend 선택 시)` |
-| Frontend만 선택 (Backend 사용 안함/기존 유지) | `## docker-compose.yml (Frontend만 선택 시)` |
-| Backend만 선택 (Frontend 사용 안함/기존 유지) | `## docker-compose.yml (Backend만 선택 시)` |
-| 둘 다 기존 유지 | 생성 안함 |
+**nginx.conf**:
+- React (Vite) 선택 시: `## docker/nginx.conf (React/Vite 선택 시)` 생성
+- 그 외: 생성 안함
 
-**Next.js 선택 시 추가 조정**: docker-compose.yml의 frontend 포트를 `"80:3000"`으로 변경
+**docker-compose.yml 선택 규칙**:
+| Frontend | Backend | 생성할 섹션 |
+|----------|---------|-----------|
+| React | 선택 | `## docker-compose.yml (React + Backend 선택 시)` |
+| Next.js | 선택 | `## docker-compose.yml (Next.js + Backend 선택 시)` |
+| React | 사용 안함/기존 유지 | `## docker-compose.yml (React만 선택 시)` |
+| Next.js | 사용 안함/기존 유지 | `## docker-compose.yml (Next.js만 선택 시)` |
+| 사용 안함/기존 유지 | 선택 | `## docker-compose.yml (Backend만 선택 시)` |
+| 기존 유지 | 기존 유지 | 생성 안함 |
 
 #### GitLab CI 선택 규칙
-`_templates/boilerplate/gitlab-ci.md`에서 스택 선택에 따라 해당 템플릿 생성:
+`@_templates/boilerplate/gitlab-ci.md`에서 스택 선택에 따라 해당 템플릿 생성:
 
 | Frontend | Backend | 생성할 섹션 |
 |----------|---------|-----------|
@@ -292,11 +318,11 @@ questions:
 
 ## 생성 순서
 
-1. 기본 구조 (`common.md`)
-2. role 파일
-3. Frontend + 테마
-4. MSW
+1. 기본 구조 (`@_templates/boilerplate/common.md`)
+2. role 파일 (`@_templates/role/*.md`)
+3. Frontend + 테마 + 스타일 가이드
+4. MSW (`@_templates/boilerplate/msw.md`)
 5. Backend
-6. Docker
-7. GitLab CI
+6. Docker (`@_templates/boilerplate/docker.md`)
+7. GitLab CI (`@_templates/boilerplate/gitlab-ci.md`)
 8. 결과 트리 출력

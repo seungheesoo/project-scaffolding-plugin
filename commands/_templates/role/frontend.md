@@ -211,3 +211,9 @@ import { Input } from '@shared/ui/input'
 // ❌ Bad - 상대 경로로 직접 접근
 import { Button } from '../../../shared/ui/button'
 ```
+
+### 스타일 가이드
+`.claude/style-guide.md` 파일이 존재하면 해당 가이드를 참조하여 스타일링:
+- 컬러 토큰, 타이포그래피, 스페이싱 등 디자인 시스템 준수
+- 컴포넌트 패턴 (버튼, 카드, 입력 필드, 테이블) 참조
+- CSS 변수명은 스타일 가이드의 토큰명 사용

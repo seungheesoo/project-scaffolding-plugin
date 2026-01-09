@@ -110,7 +110,7 @@ server {
 }
 ```
 
-## docker-compose.yml (Frontend + Backend 선택 시)
+## docker-compose.yml (React + Backend 선택 시)
 ```yaml
 services:
   frontend:
@@ -132,7 +132,29 @@ services:
       - ./config/.env
 ```
 
-## docker-compose.yml (Frontend만 선택 시)
+## docker-compose.yml (Next.js + Backend 선택 시)
+```yaml
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.frontend
+    ports:
+      - "80:3000"
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.backend
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./config/.env
+```
+
+## docker-compose.yml (React만 선택 시)
 ```yaml
 services:
   frontend:
@@ -141,6 +163,19 @@ services:
       dockerfile: docker/Dockerfile.frontend
     ports:
       - "80:80"
+    env_file:
+      - ./config/.env
+```
+
+## docker-compose.yml (Next.js만 선택 시)
+```yaml
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.frontend
+    ports:
+      - "80:3000"
     env_file:
       - ./config/.env
 ```
