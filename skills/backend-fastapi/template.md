@@ -4,22 +4,22 @@
 ```
 backend/
 ├── app/
-│   ├── __init__.py             # ★ 생성
+│   ├── __init__.py             
 │   ├── api/
-│   │   └── __init__.py         # ★ 생성
+│   │   └── __init__.py         
 │   ├── core/
-│   │   └── __init__.py         # ★ 생성
+│   │   └── __init__.py         
 │   ├── models/
-│   │   └── __init__.py         # ★ 생성
+│   │   └── __init__.py         
 │   ├── schemas/
-│   │   └── __init__.py         # ★ 생성
+│   │   └── __init__.py         
 │   ├── services/
-│   │   └── __init__.py         # ★ 생성
-│   └── main.py                 # ★ 생성
+│   │   └── __init__.py         
+│   └── main.py                 
 ├── tests/
-│   └── __init__.py             # ★ 생성
-├── requirements.txt            # ★ 생성
-└── pyproject.toml              # ★ 생성
+│   └── __init__.py             
+├── requirements.txt            
+└── pyproject.toml              
 ```
 
 ## backend/requirements.txt

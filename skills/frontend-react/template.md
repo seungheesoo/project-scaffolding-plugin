@@ -8,7 +8,7 @@ frontend/
 │   │   ├── providers/
 │   │   ├── router/
 │   │   ├── styles/
-│   │   │   └── global.css      # ★ Tailwind + CSS 변수
+│   │   │   └── global.css      # Tailwind + CSS 변수
 │   │   └── index.tsx
 │   ├── pages/                  # 페이지 컴포넌트
 │   ├── widgets/                # 독립적 UI 블록
@@ -23,11 +23,11 @@ frontend/
 ├── index.html
 ├── package.json
 ├── vite.config.ts
-├── tailwind.config.ts          # ★ 생성
-├── postcss.config.mjs          # ★ 생성
+├── tailwind.config.ts
+├── postcss.config.mjs          
 ├── tsconfig.json
-├── components.json             # ★ shadcn 설정
-└── eslint.config.mjs           # ★ 생성
+├── components.json             # shadcn 설정
+└── eslint.config.mjs           
 ```
 
 ## frontend/package.json

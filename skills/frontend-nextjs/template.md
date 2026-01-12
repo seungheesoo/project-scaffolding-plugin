@@ -4,11 +4,11 @@
 ```
 frontend/
 ├── app/                        # App Router (라우팅 + 레이아웃)
-│   ├── layout.tsx              # 루트 레이아웃 ★ 생성
-│   ├── page.tsx                # 홈 페이지 ★ 생성
-│   ├── loading.tsx             # 로딩 UI ★ 생성
-│   ├── error.tsx               # 에러 UI ★ 생성
-│   ├── not-found.tsx           # 404 페이지 ★ 생성
+│   ├── layout.tsx              # 루트 레이아웃 
+│   ├── page.tsx                # 홈 페이지 
+│   ├── loading.tsx             # 로딩 UI 
+│   ├── error.tsx               # 에러 UI 
+│   ├── not-found.tsx           # 404 페이지 
 │   ├── (auth)/                 # [예시] 라우트 그룹 - 생성 안함
 │   │   ├── login/page.tsx      # [예시]
 │   │   └── signup/page.tsx     # [예시]
@@ -16,7 +16,7 @@ frontend/
 │   │   ├── layout.tsx          # [예시]
 │   │   └── page.tsx            # [예시]
 │   └── api/                    # Route Handlers
-│       └── health/route.ts     # ★ 생성
+│       └── health/route.ts     
 ├── src/
 │   ├── widgets/                # 독립적 UI 블록 (Header, Footer 등)
 │   ├── features/               # 사용자 기능 (auth, cart 등)
@@ -30,9 +30,9 @@ frontend/
 ├── public/
 ├── package.json
 ├── next.config.ts
-├── tailwind.config.ts          # ★ 생성
-├── postcss.config.mjs          # ★ 생성
-├── components.json             # ★ shadcn 설정
+├── tailwind.config.ts          
+├── postcss.config.mjs          
+├── components.json             # shadcn 설정
 └── tsconfig.json
 ```
 

@@ -73,10 +73,10 @@ export { SignupForm } from './SignupForm'
 
 **import 규칙**:
 ```typescript
-// ✅ Good - barrel 파일에서 import
+// Good - barrel 파일에서 import
 import { LoginForm, useAuthStore } from '@features/auth'
 
-// ❌ Bad - 내부 파일 직접 import
+// Bad - 내부 파일 직접 import
 import { LoginForm } from '@features/auth/ui/LoginForm'
 ```
 
@@ -109,11 +109,11 @@ import { LoginForm } from '@features/auth/ui/LoginForm'
 **Next.js (App Router)**: `@pages`, `@app` 사용 안함 - `app/` 디렉토리가 라우팅 담당
 
 ```typescript
-// ✅ Good - alias 사용
+// Good - alias 사용
 import { Button } from '@shared/ui'
 import { useUser } from '@entities/user'
 
-// ❌ Bad - 상대 경로로 다른 레이어 접근
+// Bad - 상대 경로로 다른 레이어 접근
 import { Button } from '../../shared/ui'
 import { useUser } from '../../../entities/user'
 ```
@@ -204,11 +204,11 @@ import styles from './Component.module.css'
   - Next.js: `src/shared/styles/global.css`
 
 ```typescript
-// ✅ Good - shared/ui에서 import
+// Good - shared/ui에서 import
 import { Button } from '@shared/ui/button'
 import { Input } from '@shared/ui/input'
 
-// ❌ Bad - 상대 경로로 직접 접근
+// Bad - 상대 경로로 직접 접근
 import { Button } from '../../../shared/ui/button'
 ```
 

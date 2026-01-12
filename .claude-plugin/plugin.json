@@ -6,6 +6,8 @@
     "name": "project-scaffolding"
   },
   "license": "MIT",
+  "commands": ["./commands/"],
+  "skills": ["./skills/"],
   "keywords": [
     "scaffolding",
     "fullstack",

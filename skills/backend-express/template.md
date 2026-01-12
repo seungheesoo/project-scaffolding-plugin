@@ -10,13 +10,13 @@ backend/
 │   ├── routes/
 │   ├── middlewares/
 │   ├── utils/
-│   ├── app.ts                # ★ 생성
-│   └── index.ts              # ★ 생성
+│   ├── app.ts                
+│   └── index.ts              
 ├── tests/
-├── package.json              # ★ 생성
-├── tsconfig.json             # ★ 생성
-├── jest.config.js            # ★ 생성
-└── eslint.config.mjs         # ★ 생성
+├── package.json              
+├── tsconfig.json             
+├── jest.config.js            
+└── eslint.config.mjs         
 ```
 
 ## backend/package.json

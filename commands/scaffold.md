@@ -3,12 +3,51 @@ description: 풀스택 프로젝트 디렉토리 구조를 빠르게 생성합�
 argument-hint: [project-name]
 ---
 
+## 플러그인 Skills 경로
+
+**중요**: 이 커맨드에서 참조하는 모든 skill 파일은 아래 경로에 있습니다:
+
+```
+SKILLS_PATH = ~/.claude/plugins/cache/local-marketplace/project-scaffolding/1.0.0/skills
+```
+
+### Skill별 파일 매핑
+
+| Skill | 템플릿 파일 | 추가 파일 |
+|-------|------------|----------|
+| `scaffold-base` | `common.md` | `roles/root.md`, `roles/frontend.md`, `roles/backend.md` |
+| `frontend-react` | `template.md` | - |
+| `frontend-nextjs` | `template.md` | - |
+| `backend-express` | `template.md` | - |
+| `backend-fastapi` | `template.md` | - |
+| `backend-spring` | `template.md` | - |
+| `addon-msw` | `template.md` | - |
+| `infra-docker` | `template.md` | - |
+| `infra-gitlab-ci` | `template.md` | - |
+| `theme-neutral` | - | `style-guide.md` (CSS 변수 없음, 스타일 가이드만) |
+| `theme-lime-cyan` | - | `style-guide.md` (CSS 변수 + 스타일 가이드) |
+
+### 파일 읽기 예시
+
+```
+# scaffold-base 템플릿
+{SKILLS_PATH}/scaffold-base/common.md
+{SKILLS_PATH}/scaffold-base/roles/root.md
+
+# frontend 템플릿
+{SKILLS_PATH}/frontend-react/template.md
+
+# 테마 스타일 가이드
+{SKILLS_PATH}/theme-neutral/style-guide.md
+```
+
+---
+
 ## 규칙
 - Frontend: TypeScript 필수
 - Git: GitLab 사용
 - 프로젝트 이름: kebab-case
-- 템플릿 경로: `@_templates/...` 형식으로 참조 (플러그인 번들 파일, 사용자 PC 탐색 금지)
-- 폴더 구조 생성: boilerplate 템플릿 파일 내용을 그대로 복사하여 생성
+- 폴더 구조 생성: skill의 템플릿 파일 내용을 그대로 복사하여 생성
 - 파일 존재 판단 (대상 폴더만 해당): 숨김 파일(`.gitignore` 등) 제외, 실제 소스 파일 1개 이상 존재 시 "파일 있음"으로 판단
 - 소스 파일 정의: `.ts`, `.tsx`, `.js`, `.jsx`, `.java`, `.py`, `.json`, `.yml`, `.yaml`, `.gradle`, `.xml` 확장자
 
@@ -89,7 +128,7 @@ questions:
       - label: "Next.js"
       - label: "사용 안함"
 
-  # Frontend 선택 시에만 표시
+  # Frontend 선택 시에만 표시 (반드시 아래 옵션 중 하나만 선택, Other/직접입력 옵션 제공하지 않음)
   - header: "Theme"
     question: "스타일 테마를 선택하세요"
     condition: Frontend != "사용 안함"
@@ -148,11 +187,11 @@ questions:
 └── CLAUDE.md
 ```
 
-각 스택의 디렉토리 구조는 해당 템플릿 파일의 `## 디렉토리 구조` 섹션 참조.
+각 스택의 디렉토리 구조는 `{SKILLS_PATH}/{skill-name}/SKILL.md` 참조.
 
 ---
 
-## 템플릿 파일 참조
+## Skill 호출 규칙
 
 ### 템플릿 파일 해석 규칙
 
@@ -163,55 +202,63 @@ questions:
 ```
 
 **파일 생성 방법**:
-1. 템플릿 파일에서 `## ` 로 시작하는 헤딩을 찾음 (코드 블록 내부 제외)
-2. 헤딩 텍스트 = 생성할 파일 경로 (예: `## frontend/package.json` → `frontend/package.json`)
-3. 헤딩 바로 아래 코드 블록(``` 또는 ```언어)의 내용을 파일로 생성
-4. 다음 `## ` 헤딩까지 반복
+1. 위 "Skill별 파일 매핑" 테이블에서 해당 skill의 템플릿 파일명 확인
+2. `{SKILLS_PATH}/{skill-name}/{템플릿파일}` 파일을 Read 도구로 읽음
+   - 예: `{SKILLS_PATH}/scaffold-base/common.md`
+   - 예: `{SKILLS_PATH}/frontend-react/template.md`
+3. `## ` 로 시작하는 헤딩을 찾음 (코드 블록 내부 제외)
+4. 헤딩 텍스트 = 생성할 파일 경로 (예: `## frontend/package.json` → `frontend/package.json`)
+5. 헤딩 바로 아래 코드 블록(``` 또는 ```언어)의 내용을 파일로 생성
+6. 다음 `## ` 헤딩까지 반복
+
+**scaffold-base 특수 처리**:
+- `common.md`: 공통 설정 파일 (.gitignore, README.md 등)
+- `roles/root.md`: `.claude/role/root.md` 내용
+- `roles/frontend.md`: `.claude/role/frontend.md` 내용 (Frontend 선택 시)
+- `roles/backend.md`: `.claude/role/backend.md` 내용 (Backend 선택 시)
+
+**테마 skill 특수 처리**:
+- 템플릿 파일 없음 (boilerplate 생성 안 함)
+- `style-guide.md`에서 CSS 변수와 스타일 가이드 추출
 
 **예외 처리**:
 - `## 디렉토리 구조` 섹션: 파일 생성 안함 (참고용)
 - 괄호 포함 헤딩: 조건부 생성, 파일 경로는 ` (` 앞까지만 사용
   - 예: `## docker/Dockerfile.frontend (React/Vite 선택 시)` → 파일 경로: `docker/Dockerfile.frontend`
 
-### role 파일
-| 생성 대상 | 템플릿 파일 | 생성 조건 |
-|----------|------------|----------|
-| `.claude/role/root.md` | `@_templates/role/root.md` | 항상 |
-| `.claude/role/frontend.md` | `@_templates/role/frontend.md` | Frontend 선택 또는 `frontend/` 존재 |
-| `.claude/role/backend.md` | `@_templates/role/backend.md` | Backend 선택 또는 `backend/` 존재 |
+### Skill 호출 순서
+
+| 순서 | Skill | 호출 조건 |
+|------|-------|----------|
+| 1 | `scaffold-base` | 항상 |
+| 2 | `frontend-react` | Frontend = "React (Vite)" |
+| 2 | `frontend-nextjs` | Frontend = "Next.js" |
+| 3 | `theme-lime-cyan` | Frontend 선택 + Theme = "Lime-Cyan Dark" |
+| 3 | `theme-neutral` | Frontend 선택 + Theme = "shadcn/ui Neutral" |
+| 4 | `backend-express` | Backend = "Node.js (Express)" |
+| 4 | `backend-spring` | Backend = "Java (Spring Boot)" |
+| 4 | `backend-fastapi` | Backend = "Python (FastAPI)" |
+| 5 | `addon-msw` | Frontend 선택 + MSW = "MSW 설정" |
+| 6 | `infra-docker` | Infra에 "Docker" 포함 |
+| 7 | `infra-gitlab-ci` | Infra에 "GitLab CI" 포함 |
+
+### role 파일 생성 조건
+| 생성 대상 | 호출 조건 |
+|----------|----------|
+| `.claude/role/root.md` | 항상 |
+| `.claude/role/frontend.md` | Frontend 선택 또는 `frontend/` 존재 |
+| `.claude/role/backend.md` | Backend 선택 또는 `backend/` 존재 |
 
 **참고**: role 파일은 병합 모드에서도 항상 덮어씁니다 (컨벤션 동기화)
 
-### 공통 파일
-`@_templates/boilerplate/common.md` 파일에서 각 `## 파일경로` 섹션의 코드 블록 추출:
-| 생성 대상 | 템플릿 섹션 헤딩 |
-|----------|----------------|
-| `config/.env.example` | `## config/.env.example` |
-| `.gitignore` | `## .gitignore` |
-| `README.md` | `## README.md (프로젝트 루트)` |
-| `docs/README.md` | `## docs/README.md` |
-| `CLAUDE.md` | `## CLAUDE.md` |
-
-### Frontend boilerplate
-| 선택 | 템플릿 파일 |
-|------|------------|
-| React (Vite) | `@_templates/boilerplate/react.md` |
-| Next.js | `@_templates/boilerplate/nextjs.md` |
-
 ### 테마 적용 규칙
 
-**테마 파일 매핑**:
-| 테마 선택 | 템플릿 파일 |
-|----------|------------|
-| shadcn/ui Neutral | `@_templates/themes/neutral.md` |
-| Lime-Cyan Dark | `@_templates/themes/lime-cyan-dark.md` |
-
-**CSS 변수 적용** (테마 파일에 `## CSS 변수` 섹션이 있는 경우만):
+**CSS 변수 적용** (theme-lime-cyan skill만 해당):
 1. `global.css` 생성 시:
    - boilerplate의 `@tailwind` 지시문 3줄 유지
    - 첫 번째 `@layer base` 블록 (`:root` 포함, CSS 변수 정의) → 테마의 `## CSS 변수` 내용으로 **교체**
    - 두 번째 `@layer base` 블록 (`*`, `body` 포함, 기본 스타일) → 그대로 유지
-2. `tailwind.config.ts` 생성 시, `## Tailwind 확장 색상` 섹션이 있으면 `colors` 객체 끝에 **추가**
+2. `tailwind.config.ts` 생성 시, `## Tailwind 확장 색상` 섹션이 있으면 `colors` 객체 내부 마지막 항목 뒤에 **추가**
 
 **global.css 경로** (프레임워크별):
 | Frontend | global.css 경로 |
@@ -222,22 +269,16 @@ questions:
 **병합 모드**: 기존 `frontend/`가 있으면 테마 적용 안함 (기존 스타일 유지)
 
 **스타일 가이드 생성**:
-- 조건: Frontend 선택 + 테마 파일에 `## 스타일 가이드` 섹션 존재
+- 조건: Frontend 선택 + 테마 skill 호출됨
 - 생성 파일: `.claude/style-guide.md`
-- 내용: 테마 파일의 `## 스타일 가이드` 헤딩(포함)부터 파일 끝까지 복사
+- 내용: `{SKILLS_PATH}/{theme-skill}/style-guide.md`에서 `## 스타일 가이드` 헤딩(포함)부터 파일 끝까지 복사
 - **병합 모드**: 기존 `frontend/`가 있으면 생성 안함 (기존 스타일 유지)
 
-### MSW boilerplate
-`@_templates/boilerplate/msw.md`에서 Frontend 선택에 따라 해당 파일 생성:
+### MSW 적용 규칙
 
 **병합 모드**: 기존 `frontend/`가 있으면 MSW 질문 자체를 건너뛰므로 생성 안함
 
-**MSW 설정 선택 시**:
-| 생성 대상 | 템플릿 섹션 헤딩 |
-|----------|----------------|
-| `frontend/src/mocks/handlers.ts` | `## frontend/src/mocks/handlers.ts` |
-| `frontend/src/mocks/browser.ts` | `## frontend/src/mocks/browser.ts` |
-| `frontend/src/mocks/index.ts` | 아래 조건 참조 |
+**MSW 설정 선택 시** (`addon-msw` skill 호출):
 
 **index.ts 선택 규칙**:
 | 조건 | 생성할 섹션 |
@@ -261,24 +302,16 @@ questions:
 | Next.js + Backend 사용 안함 | `## frontend/app/providers/MSWProvider.tsx (Next.js, MSW)` |
 | Next.js + Backend 선택 | `## frontend/app/providers/MSWProvider.tsx (Next.js, MSW, disabled)` |
 
-### Backend boilerplate
-| 선택 | 템플릿 파일 |
-|------|------------|
-| Node.js (Express) | `@_templates/boilerplate/express.md` |
-| Java (Spring Boot) | `@_templates/boilerplate/spring.md` |
-| Python (FastAPI) | `@_templates/boilerplate/fastapi.md` |
+### Docker 적용 규칙
 
-### Infra boilerplate
-
-#### Docker 파일 선택 규칙
-`@_templates/boilerplate/docker.md`에서 스택 선택에 따라 해당 Dockerfile 생성:
-
+**Dockerfile.frontend 선택 규칙**:
 | Frontend 선택 | 생성할 섹션 |
 |--------------|-----------|
 | React (Vite) | `## docker/Dockerfile.frontend (React/Vite 선택 시)` |
 | Next.js | `## docker/Dockerfile.frontend (Next.js 선택 시)` |
 | 기존 유지 / 사용 안함 | 생성 안함 |
 
+**Dockerfile.backend 선택 규칙**:
 | Backend 선택 | 생성할 섹션 |
 |-------------|-----------|
 | Node.js (Express) | `## docker/Dockerfile.backend (Node.js 선택 시)` |
@@ -300,8 +333,7 @@ questions:
 | 사용 안함/기존 유지 | 선택 | `## docker-compose.yml (Backend만 선택 시)` |
 | 기존 유지 | 기존 유지 | 생성 안함 |
 
-#### GitLab CI 선택 규칙
-`@_templates/boilerplate/gitlab-ci.md`에서 스택 선택에 따라 해당 템플릿 생성:
+### GitLab CI 적용 규칙
 
 | Frontend | Backend | 생성할 섹션 |
 |----------|---------|-----------|
@@ -318,11 +350,11 @@ questions:
 
 ## 생성 순서
 
-1. 기본 구조 (`@_templates/boilerplate/common.md`)
-2. role 파일 (`@_templates/role/*.md`)
+1. 기본 구조 (`scaffold-base` skill)
+2. role 파일 (`scaffold-base` skill의 roles/)
 3. Frontend + 테마 + 스타일 가이드
-4. MSW (`@_templates/boilerplate/msw.md`)
+4. MSW (`addon-msw` skill)
 5. Backend
-6. Docker (`@_templates/boilerplate/docker.md`)
-7. GitLab CI (`@_templates/boilerplate/gitlab-ci.md`)
+6. Docker (`infra-docker` skill)
+7. GitLab CI (`infra-gitlab-ci` skill)
 8. 결과 트리 출력

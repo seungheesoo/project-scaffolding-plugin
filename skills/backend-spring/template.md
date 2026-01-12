@@ -5,18 +5,18 @@
 backend/
 ├── src/main/java/com/{project}/
 │   ├── controller/
-│   │   └── HealthController.java   # ★ 생성
+│   │   └── HealthController.java   
 │   ├── service/
 │   ├── repository/
 │   ├── entity/
 │   ├── dto/
 │   ├── config/
-│   └── Application.java            # ★ 생성
+│   └── Application.java            
 ├── src/main/resources/
-│   └── application.yml             # ★ 생성
+│   └── application.yml             
 ├── src/test/
-├── build.gradle                    # ★ 생성
-└── settings.gradle                 # ★ 생성
+├── build.gradle                    
+└── settings.gradle                 
 ```
 
 ## backend/build.gradle
