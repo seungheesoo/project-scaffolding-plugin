@@ -193,38 +193,21 @@ questions:
 
 ## Skill 호출 규칙
 
-### 템플릿 파일 해석 규칙
+### 스킬 호출 방법
 
-**boilerplate 템플릿 구조**:
-```markdown
-## {파일경로}
-```코드```
+**각 스킬은 Skill 도구를 사용하여 호출합니다.**
+
+**호출 형식**:
+```
+Skill("project-scaffolding:{skill-name}")
 ```
 
-**파일 생성 방법**:
-1. 위 "Skill별 파일 매핑" 테이블에서 해당 skill의 템플릿 파일명 확인
-2. `{SKILLS_PATH}/{skill-name}/{템플릿파일}` 파일을 Read 도구로 읽음
-   - 예: `{SKILLS_PATH}/scaffold-base/common.md`
-   - 예: `{SKILLS_PATH}/frontend-react/template.md`
-3. `## ` 로 시작하는 헤딩을 찾음 (코드 블록 내부 제외)
-4. 헤딩 텍스트 = 생성할 파일 경로 (예: `## frontend/package.json` → `frontend/package.json`)
-5. 헤딩 바로 아래 코드 블록(``` 또는 ```언어)의 내용을 파일로 생성
-6. 다음 `## ` 헤딩까지 반복
+**예시**:
+- `Skill("project-scaffolding:scaffold-base")` - 기본 파일 생성
+- `Skill("project-scaffolding:frontend-react")` - React 프로젝트 생성
+- `Skill("project-scaffolding:backend-express")` - Express 백엔드 생성
 
-**scaffold-base 특수 처리**:
-- `common.md`: 공통 설정 파일 (.gitignore, README.md 등)
-- `roles/root.md`: `.claude/role/root.md` 내용
-- `roles/frontend.md`: `.claude/role/frontend.md` 내용 (Frontend 선택 시)
-- `roles/backend.md`: `.claude/role/backend.md` 내용 (Backend 선택 시)
-
-**테마 skill 특수 처리**:
-- 템플릿 파일 없음 (boilerplate 생성 안 함)
-- `style-guide.md`에서 CSS 변수와 스타일 가이드 추출
-
-**예외 처리**:
-- `## 디렉토리 구조` 섹션: 파일 생성 안함 (참고용)
-- 괄호 포함 헤딩: 조건부 생성, 파일 경로는 ` (` 앞까지만 사용
-  - 예: `## docker/Dockerfile.frontend (React/Vite 선택 시)` → 파일 경로: `docker/Dockerfile.frontend`
+**중요**: 템플릿 파일을 직접 Read 도구로 읽지 마세요. 각 스킬이 내부적으로 템플릿을 처리합니다.
 
 ### Skill 호출 순서
 
