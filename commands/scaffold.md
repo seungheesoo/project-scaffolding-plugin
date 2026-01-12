@@ -5,10 +5,10 @@ argument-hint: [project-name]
 
 ## 플러그인 Skills 경로
 
-**중요**: 이 커맨드에서 참조하는 모든 skill 파일은 아래 경로에 있습니다:
+**중요**: 이 커맨드에서 참조하는 모든 skill 파일은 플러그인 루트 기준 상대 경로에 있습니다:
 
 ```
-SKILLS_PATH = ~/.claude/plugins/cache/local-marketplace/project-scaffolding/1.0.0/skills
+SKILLS_PATH = ./skills
 ```
 
 ### Skill별 파일 매핑
