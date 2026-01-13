@@ -199,9 +199,9 @@ import styles from './Component.module.css'
 - 컴포넌트 위치: `shared/ui/` (FSD 구조와 통합)
 - 설치: `npx shadcn@latest add [component]`
 - 커스터마이징: `shared/ui/` 내 컴포넌트 파일 직접 수정
-- 테마 설정: `global.css`의 CSS 변수 조정
-  - React: `src/app/styles/global.css`
-  - Next.js: `src/shared/styles/global.css`
+- 테마 설정: `global.scss`의 CSS 변수 조정
+  - React: `src/app/styles/global.scss`
+  - Next.js: `src/shared/styles/global.scss`
 
 ```typescript
 // Good - shared/ui에서 import

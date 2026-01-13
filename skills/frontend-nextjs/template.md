@@ -67,6 +67,7 @@ frontend/
     "eslint": "^9.13.0",
     "eslint-config-next": "^16.0.0",
     "postcss": "^8.4.49",
+    "sass": "^1.80.0",
     "tailwindcss": "^3.4.15",
     "tailwindcss-animate": "^1.0.7",
     "typescript": "^5.6.2",
@@ -122,7 +123,7 @@ export default nextConfig
 ## frontend/app/layout.tsx
 ```tsx
 import type { Metadata } from 'next'
-import '@shared/styles/global.css'
+import '@shared/styles/global.scss'
 
 export const metadata: Metadata = {
   title: 'App',
@@ -362,7 +363,7 @@ export default config
   "tsx": true,
   "tailwind": {
     "config": "tailwind.config.ts",
-    "css": "src/shared/styles/global.css",
+    "css": "src/shared/styles/global.scss",
     "baseColor": "neutral",
     "cssVariables": true
   },
@@ -377,7 +378,7 @@ export default config
 }
 ```
 
-## frontend/src/shared/styles/global.css
+## frontend/src/shared/styles/global.scss
 ```css
 @tailwind base;
 @tailwind components;

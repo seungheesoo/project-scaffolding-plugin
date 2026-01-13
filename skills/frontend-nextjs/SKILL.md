@@ -35,7 +35,7 @@ frontend/
 │       ├── ui/
 │       ├── lib/
 │       ├── styles/
-│       │   └── global.css      # Tailwind + CSS 변수
+│       │   └── global.scss      # Tailwind + CSS 변수
 │       └── config/
 ├── public/
 ├── package.json
@@ -52,7 +52,7 @@ frontend/
 
 ## 테마 적용
 
-global.css의 CSS 변수는 선택된 테마 skill에서 제공하는 값으로 교체됩니다.
+global.scss의 CSS 변수는 선택된 테마 skill에서 제공하는 값으로 교체됩니다.
 
 | 테마 | Skill |
 |------|-------|

@@ -128,7 +128,7 @@ createRoot(document.getElementById('root')!).render(<App />)
 ```tsx
 import type { Metadata } from 'next'
 import { MSWProvider } from './providers/MSWProvider'
-import '@shared/styles/global.css'
+import '@shared/styles/global.scss'
 
 export const metadata: Metadata = {
   title: 'App',
@@ -154,7 +154,7 @@ export default function RootLayout({
 ```tsx
 import type { Metadata } from 'next'
 import { MSWProvider } from './providers/MSWProvider'
-import '@shared/styles/global.css'
+import '@shared/styles/global.scss'
 
 export const metadata: Metadata = {
   title: 'App',

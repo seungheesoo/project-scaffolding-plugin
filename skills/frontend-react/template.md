@@ -8,7 +8,7 @@ frontend/
 │   │   ├── providers/
 │   │   ├── router/
 │   │   ├── styles/
-│   │   │   └── global.css      # Tailwind + CSS 변수
+│   │   │   └── global.scss      # Tailwind + CSS 변수
 │   │   └── index.tsx
 │   ├── pages/                  # 페이지 컴포넌트
 │   ├── widgets/                # 독립적 UI 블록
@@ -68,6 +68,7 @@ frontend/
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.15",
     "tailwindcss-animate": "^1.0.7",
+    "sass": "^1.80.0",
     "typescript": "~5.6.2",
     "typescript-eslint": "^8.11.0",
     "vite": "^5.4.10",
@@ -170,7 +171,7 @@ createRoot(document.getElementById('root')!).render(<App />)
 import { StrictMode } from 'react'
 import { RouterProvider } from 'react-router-dom'
 import { router } from './router'
-import './styles/global.css'
+import './styles/global.scss'
 
 export function App() {
   return (
@@ -273,7 +274,7 @@ export default config
   "tsx": true,
   "tailwind": {
     "config": "tailwind.config.ts",
-    "css": "src/app/styles/global.css",
+    "css": "src/app/styles/global.scss",
     "baseColor": "neutral",
     "cssVariables": true
   },
@@ -288,7 +289,7 @@ export default config
 }
 ```
 
-## frontend/src/app/styles/global.css
+## frontend/src/app/styles/global.scss
 ```css
 @tailwind base;
 @tailwind components;

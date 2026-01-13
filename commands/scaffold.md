@@ -3,51 +3,11 @@ description: 풀스택 프로젝트 디렉토리 구조를 빠르게 생성합�
 argument-hint: [project-name]
 ---
 
-## 플러그인 Skills 경로
-
-**중요**: 이 커맨드에서 참조하는 모든 skill 파일은 플러그인 루트 기준 상대 경로에 있습니다:
-
-```
-SKILLS_PATH = ./skills
-```
-
-### Skill별 파일 매핑
-
-| Skill | 템플릿 파일 | 추가 파일 |
-|-------|------------|----------|
-| `scaffold-base` | `common.md` | `roles/root.md`, `roles/frontend.md`, `roles/backend.md` |
-| `frontend-react` | `template.md` | - |
-| `frontend-nextjs` | `template.md` | - |
-| `backend-express` | `template.md` | - |
-| `backend-fastapi` | `template.md` | - |
-| `backend-spring` | `template.md` | - |
-| `addon-msw` | `template.md` | - |
-| `infra-docker` | `template.md` | - |
-| `infra-gitlab-ci` | `template.md` | - |
-| `theme-neutral` | - | `style-guide.md` (CSS 변수 없음, 스타일 가이드만) |
-| `theme-lime-cyan` | - | `style-guide.md` (CSS 변수 + 스타일 가이드) |
-
-### 파일 읽기 예시
-
-```
-# scaffold-base 템플릿
-{SKILLS_PATH}/scaffold-base/common.md
-{SKILLS_PATH}/scaffold-base/roles/root.md
-
-# frontend 템플릿
-{SKILLS_PATH}/frontend-react/template.md
-
-# 테마 스타일 가이드
-{SKILLS_PATH}/theme-neutral/style-guide.md
-```
-
----
-
 ## 규칙
 - Frontend: TypeScript 필수
 - Git: GitLab 사용
 - 프로젝트 이름: kebab-case
-- 폴더 구조 생성: skill의 템플릿 파일 내용을 그대로 복사하여 생성
+- 폴더 구조 생성: Skill 도구로 각 스킬 호출하여 생성
 - 파일 존재 판단 (대상 폴더만 해당): 숨김 파일(`.gitignore` 등) 제외, 실제 소스 파일 1개 이상 존재 시 "파일 있음"으로 판단
 - 소스 파일 정의: `.ts`, `.tsx`, `.js`, `.jsx`, `.java`, `.py`, `.json`, `.yml`, `.yaml`, `.gradle`, `.xml` 확장자
 
@@ -187,8 +147,6 @@ questions:
 └── CLAUDE.md
 ```
 
-각 스택의 디렉토리 구조는 `{SKILLS_PATH}/{skill-name}/SKILL.md` 참조.
-
 ---
 
 ## Skill 호출 규칙
@@ -207,7 +165,7 @@ Skill("project-scaffolding:{skill-name}")
 - `Skill("project-scaffolding:frontend-react")` - React 프로젝트 생성
 - `Skill("project-scaffolding:backend-express")` - Express 백엔드 생성
 
-**중요**: 템플릿 파일을 직접 Read 도구로 읽지 마세요. 각 스킬이 내부적으로 템플릿을 처리합니다.
+**중요**: 반드시 Skill 도구로 스킬을 호출하세요. 플러그인 내부 파일에 직접 접근하지 마세요.
 
 ### Skill 호출 순서
 
@@ -216,8 +174,8 @@ Skill("project-scaffolding:{skill-name}")
 | 1 | `scaffold-base` | 항상 |
 | 2 | `frontend-react` | Frontend = "React (Vite)" |
 | 2 | `frontend-nextjs` | Frontend = "Next.js" |
-| 3 | `theme-lime-cyan` | Frontend 선택 + Theme = "Lime-Cyan Dark" |
 | 3 | `theme-neutral` | Frontend 선택 + Theme = "shadcn/ui Neutral" |
+| 3 | `theme-lime-cyan` | Frontend 선택 + Theme = "Lime-Cyan Dark" |
 | 4 | `backend-express` | Backend = "Node.js (Express)" |
 | 4 | `backend-spring` | Backend = "Java (Spring Boot)" |
 | 4 | `backend-fastapi` | Backend = "Python (FastAPI)" |
@@ -236,26 +194,9 @@ Skill("project-scaffolding:{skill-name}")
 
 ### 테마 적용 규칙
 
-**CSS 변수 적용** (theme-lime-cyan skill만 해당):
-1. `global.css` 생성 시:
-   - boilerplate의 `@tailwind` 지시문 3줄 유지
-   - 첫 번째 `@layer base` 블록 (`:root` 포함, CSS 변수 정의) → 테마의 `## CSS 변수` 내용으로 **교체**
-   - 두 번째 `@layer base` 블록 (`*`, `body` 포함, 기본 스타일) → 그대로 유지
-2. `tailwind.config.ts` 생성 시, `## Tailwind 확장 색상` 섹션이 있으면 `colors` 객체 내부 마지막 항목 뒤에 **추가**
-
-**global.css 경로** (프레임워크별):
-| Frontend | global.css 경로 |
-|----------|----------------|
-| React (Vite) | `frontend/src/app/styles/global.css` |
-| Next.js | `frontend/src/shared/styles/global.css` |
+각 테마 skill의 `## 적용 규칙` 참조.
 
 **병합 모드**: 기존 `frontend/`가 있으면 테마 적용 안함 (기존 스타일 유지)
-
-**스타일 가이드 생성**:
-- 조건: Frontend 선택 + 테마 skill 호출됨
-- 생성 파일: `.claude/style-guide.md`
-- 내용: `{SKILLS_PATH}/{theme-skill}/style-guide.md`에서 `## 스타일 가이드` 헤딩(포함)부터 파일 끝까지 복사
-- **병합 모드**: 기존 `frontend/`가 있으면 생성 안함 (기존 스타일 유지)
 
 ### MSW 적용 규칙
 
