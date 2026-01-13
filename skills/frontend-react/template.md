@@ -1,172 +1,12 @@
-# React (Vite) Boilerplate
+# React (Vite) Template
 
-## 디렉토리 구조
-```
-frontend/
-├── src/
-│   ├── app/                    # 앱 초기화, 프로바이더, 라우터
-│   │   ├── providers/
-│   │   ├── router/
-│   │   ├── styles/
-│   │   │   └── global.scss      # Tailwind + CSS 변수
-│   │   └── index.tsx
-│   ├── pages/                  # 페이지 컴포넌트
-│   ├── widgets/                # 독립적 UI 블록
-│   ├── features/               # 사용자 기능
-│   ├── entities/               # 비즈니스 엔티티
-│   └── shared/                 # 공용 모듈
-│       ├── api/                # API 클라이언트
-│       ├── ui/                 # shadcn/ui 컴포넌트
-│       ├── lib/                # 유틸리티 (cn 함수 포함)
-│       └── config/             # 환경 설정
-├── public/
-├── index.html
-├── package.json
-├── vite.config.ts
-├── tailwind.config.ts
-├── postcss.config.mjs          
-├── tsconfig.json
-├── components.json             # shadcn 설정
-└── eslint.config.mjs           
-```
+`npm create vite@latest` 실행 후 생성/수정할 파일들입니다.
 
-## frontend/package.json
-```json
-{
-  "name": "frontend",
-  "private": true,
-  "version": "0.0.1",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "preview": "vite preview",
-    "lint": "eslint ."
-  },
-  "dependencies": {
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "react-router-dom": "^6.28.0",
-    "react-hook-form": "^7.53.0",
-    "@hookform/resolvers": "^3.9.0",
-    "zod": "^3.23.0",
-    "clsx": "^2.1.1",
-    "tailwind-merge": "^2.5.0",
-    "class-variance-authority": "^0.7.1",
-    "lucide-react": "^0.460.0"
-  },
-  "devDependencies": {
-    "@eslint/js": "^9.13.0",
-    "@types/react": "^19.0.0",
-    "@types/react-dom": "^19.0.0",
-    "@vitejs/plugin-react": "^4.3.3",
-    "autoprefixer": "^10.4.20",
-    "eslint": "^9.13.0",
-    "eslint-plugin-react-hooks": "^5.0.0",
-    "eslint-plugin-react-refresh": "^0.4.14",
-    "globals": "^15.11.0",
-    "postcss": "^8.4.49",
-    "tailwindcss": "^3.4.15",
-    "tailwindcss-animate": "^1.0.7",
-    "sass": "^1.80.0",
-    "typescript": "~5.6.2",
-    "typescript-eslint": "^8.11.0",
-    "vite": "^5.4.10",
-    "msw": "^2.6.0"
-  }
-}
-```
+---
 
-## frontend/vite.config.ts
-```typescript
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import path from 'path'
+## 생성 파일
 
-export default defineConfig({
-  plugins: [react()],
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './src'),
-      '@app': path.resolve(__dirname, './src/app'),
-      '@pages': path.resolve(__dirname, './src/pages'),
-      '@widgets': path.resolve(__dirname, './src/widgets'),
-      '@features': path.resolve(__dirname, './src/features'),
-      '@entities': path.resolve(__dirname, './src/entities'),
-      '@shared': path.resolve(__dirname, './src/shared'),
-    },
-  },
-  server: {
-    port: 5173,
-    proxy: {
-      '/api': {
-        target: 'http://localhost:3000',
-        changeOrigin: true,
-      },
-    },
-  },
-})
-```
-
-## frontend/tsconfig.json
-```json
-{
-  "compilerOptions": {
-    "target": "ES2020",
-    "useDefineForClassFields": true,
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "module": "ESNext",
-    "skipLibCheck": true,
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx",
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["src/*"],
-      "@app/*": ["src/app/*"],
-      "@pages/*": ["src/pages/*"],
-      "@widgets/*": ["src/widgets/*"],
-      "@features/*": ["src/features/*"],
-      "@entities/*": ["src/entities/*"],
-      "@shared/*": ["src/shared/*"]
-    }
-  },
-  "include": ["src"]
-}
-```
-
-## frontend/index.html
-```html
-<!DOCTYPE html>
-<html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>App</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
-</html>
-```
-
-## frontend/src/main.tsx
-```tsx
-import { createRoot } from 'react-dom/client'
-import { App } from '@app/index'
-
-createRoot(document.getElementById('root')!).render(<App />)
-```
-
-## frontend/src/app/index.tsx
+### frontend/src/app/index.tsx
 ```tsx
 import { StrictMode } from 'react'
 import { RouterProvider } from 'react-router-dom'
@@ -182,7 +22,7 @@ export function App() {
 }
 ```
 
-## frontend/src/app/router/index.tsx
+### frontend/src/app/router/index.tsx
 ```tsx
 import { createBrowserRouter } from 'react-router-dom'
 import { HomePage } from '@pages/home'
@@ -195,102 +35,8 @@ export const router = createBrowserRouter([
 ])
 ```
 
-## frontend/tailwind.config.ts
-```typescript
-import type { Config } from 'tailwindcss'
-import tailwindcssAnimate from 'tailwindcss-animate'
-
-const config: Config = {
-  darkMode: ['class'],
-  content: ['./index.html', './src/**/*.{ts,tsx}'],
-  theme: {
-    extend: {
-      colors: {
-        background: 'hsl(var(--background))',
-        foreground: 'hsl(var(--foreground))',
-        card: {
-          DEFAULT: 'hsl(var(--card))',
-          foreground: 'hsl(var(--card-foreground))',
-        },
-        popover: {
-          DEFAULT: 'hsl(var(--popover))',
-          foreground: 'hsl(var(--popover-foreground))',
-        },
-        primary: {
-          DEFAULT: 'hsl(var(--primary))',
-          foreground: 'hsl(var(--primary-foreground))',
-        },
-        secondary: {
-          DEFAULT: 'hsl(var(--secondary))',
-          foreground: 'hsl(var(--secondary-foreground))',
-        },
-        muted: {
-          DEFAULT: 'hsl(var(--muted))',
-          foreground: 'hsl(var(--muted-foreground))',
-        },
-        accent: {
-          DEFAULT: 'hsl(var(--accent))',
-          foreground: 'hsl(var(--accent-foreground))',
-        },
-        destructive: {
-          DEFAULT: 'hsl(var(--destructive))',
-          foreground: 'hsl(var(--destructive-foreground))',
-        },
-        border: 'hsl(var(--border))',
-        input: 'hsl(var(--input))',
-        ring: 'hsl(var(--ring))',
-      },
-      borderRadius: {
-        lg: 'var(--radius)',
-        md: 'calc(var(--radius) - 2px)',
-        sm: 'calc(var(--radius) - 4px)',
-      },
-    },
-  },
-  plugins: [tailwindcssAnimate],
-}
-
-export default config
-```
-
-## frontend/postcss.config.mjs
-```javascript
-const config = {
-  plugins: {
-    tailwindcss: {},
-    autoprefixer: {},
-  },
-}
-
-export default config
-```
-
-## frontend/components.json
-```json
-{
-  "$schema": "https://ui.shadcn.com/schema.json",
-  "style": "default",
-  "rsc": false,
-  "tsx": true,
-  "tailwind": {
-    "config": "tailwind.config.ts",
-    "css": "src/app/styles/global.scss",
-    "baseColor": "neutral",
-    "cssVariables": true
-  },
-  "aliases": {
-    "components": "@shared/ui",
-    "utils": "@shared/lib/utils",
-    "ui": "@shared/ui",
-    "lib": "@shared/lib",
-    "hooks": "@shared/lib/hooks"
-  },
-  "iconLibrary": "lucide"
-}
-```
-
-## frontend/src/app/styles/global.scss
-```css
+### frontend/src/app/styles/global.scss
+```scss
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -353,7 +99,7 @@ export default config
 }
 ```
 
-## frontend/src/pages/home/index.tsx
+### frontend/src/pages/home/index.tsx
 ```tsx
 export function HomePage() {
   return (
@@ -364,7 +110,7 @@ export function HomePage() {
 }
 ```
 
-## frontend/src/shared/index.ts
+### frontend/src/shared/index.ts
 ```typescript
 // API
 export { apiClient } from './api'
@@ -376,12 +122,12 @@ export * from './ui'
 export * from './lib'
 ```
 
-## frontend/src/shared/api/index.ts
+### frontend/src/shared/api/index.ts
 ```typescript
 export { apiClient } from './client'
 ```
 
-## frontend/src/shared/api/client.ts
+### frontend/src/shared/api/client.ts
 ```typescript
 const API_BASE_URL = import.meta.env.VITE_API_URL || '/api'
 
@@ -405,19 +151,19 @@ export async function apiClient<T>(
 }
 ```
 
-## frontend/src/shared/ui/index.ts
+### frontend/src/shared/ui/index.ts
 ```typescript
 // 공용 UI 컴포넌트 export
 // export { Button } from './Button'
 // export { Input } from './Input'
 ```
 
-## frontend/src/shared/lib/index.ts
+### frontend/src/shared/lib/index.ts
 ```typescript
 export { cn } from './utils'
 ```
 
-## frontend/src/shared/lib/utils.ts
+### frontend/src/shared/lib/utils.ts
 ```typescript
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
@@ -427,34 +173,195 @@ export function cn(...inputs: ClassValue[]) {
 }
 ```
 
-## frontend/eslint.config.mjs
-```javascript
-import js from '@eslint/js'
-import globals from 'globals'
-import reactHooks from 'eslint-plugin-react-hooks'
-import reactRefresh from 'eslint-plugin-react-refresh'
-import tseslint from 'typescript-eslint'
+### frontend/tailwind.config.ts
+```typescript
+import type { Config } from 'tailwindcss'
+import tailwindcssAnimate from 'tailwindcss-animate'
 
-export default tseslint.config(
-  { ignores: ['dist'] },
-  {
-    extends: [js.configs.recommended, ...tseslint.configs.recommended],
-    files: ['**/*.{ts,tsx}'],
-    languageOptions: {
-      ecmaVersion: 2020,
-      globals: globals.browser,
+const config: Config = {
+  darkMode: ['class'],
+  content: ['./index.html', './src/**/*.{ts,tsx}'],
+  theme: {
+    extend: {
+      colors: {
+        background: 'hsl(var(--background))',
+        foreground: 'hsl(var(--foreground))',
+        card: {
+          DEFAULT: 'hsl(var(--card))',
+          foreground: 'hsl(var(--card-foreground))',
+        },
+        popover: {
+          DEFAULT: 'hsl(var(--popover))',
+          foreground: 'hsl(var(--popover-foreground))',
+        },
+        primary: {
+          DEFAULT: 'hsl(var(--primary))',
+          foreground: 'hsl(var(--primary-foreground))',
+        },
+        secondary: {
+          DEFAULT: 'hsl(var(--secondary))',
+          foreground: 'hsl(var(--secondary-foreground))',
+        },
+        muted: {
+          DEFAULT: 'hsl(var(--muted))',
+          foreground: 'hsl(var(--muted-foreground))',
+        },
+        accent: {
+          DEFAULT: 'hsl(var(--accent))',
+          foreground: 'hsl(var(--accent-foreground))',
+        },
+        destructive: {
+          DEFAULT: 'hsl(var(--destructive))',
+          foreground: 'hsl(var(--destructive-foreground))',
+        },
+        border: 'hsl(var(--border))',
+        input: 'hsl(var(--input))',
+        ring: 'hsl(var(--ring))',
+      },
+      borderRadius: {
+        lg: 'var(--radius)',
+        md: 'calc(var(--radius) - 2px)',
+        sm: 'calc(var(--radius) - 4px)',
+      },
     },
-    plugins: {
-      'react-hooks': reactHooks,
-      'react-refresh': reactRefresh,
+  },
+  plugins: [tailwindcssAnimate],
+}
+
+export default config
+```
+
+### frontend/postcss.config.mjs
+```javascript
+const config = {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  },
+}
+
+export default config
+```
+
+### frontend/components.json
+```json
+{
+  "$schema": "https://ui.shadcn.com/schema.json",
+  "style": "default",
+  "rsc": false,
+  "tsx": true,
+  "tailwind": {
+    "config": "tailwind.config.ts",
+    "css": "src/app/styles/global.scss",
+    "baseColor": "neutral",
+    "cssVariables": true
+  },
+  "aliases": {
+    "components": "@shared/ui",
+    "utils": "@shared/lib/utils",
+    "ui": "@shared/ui",
+    "lib": "@shared/lib",
+    "hooks": "@shared/lib/hooks"
+  },
+  "iconLibrary": "lucide"
+}
+```
+
+---
+
+## 수정 지시
+
+파일을 읽고, 아래 지시에 따라 수정합니다. 경로는 `{project}/frontend/` 기준입니다.
+
+### vite.config.ts
+
+파일을 읽고 `resolve.alias` 객체를 추가 (기존 plugins 유지):
+
+```typescript
+import path from 'path'
+
+// defineConfig 내부에 추가:
+resolve: {
+  alias: {
+    '@': path.resolve(__dirname, './src'),
+    '@app': path.resolve(__dirname, './src/app'),
+    '@pages': path.resolve(__dirname, './src/pages'),
+    '@widgets': path.resolve(__dirname, './src/widgets'),
+    '@features': path.resolve(__dirname, './src/features'),
+    '@entities': path.resolve(__dirname, './src/entities'),
+    '@shared': path.resolve(__dirname, './src/shared'),
+  },
+},
+```
+
+선택적으로 `server.proxy` 추가 (Backend 연동 시):
+
+```typescript
+server: {
+  port: 5173,
+  proxy: {
+    '/api': {
+      target: 'http://localhost:3000',
+      changeOrigin: true,
     },
-    rules: {
-      ...reactHooks.configs.recommended.rules,
-      'react-refresh/only-export-components': [
-        'warn',
-        { allowConstantExport: true },
-      ],
-    },
-  }
+  },
+},
+```
+
+### tsconfig.json
+
+파일을 읽고 `compilerOptions`에 아래 항목들을 추가/병합:
+
+**1. `baseUrl` 추가:**
+```json
+"baseUrl": ".",
+```
+
+**2. `paths` 객체 추가:**
+```json
+"paths": {
+  "@/*": ["src/*"],
+  "@app/*": ["src/app/*"],
+  "@pages/*": ["src/pages/*"],
+  "@widgets/*": ["src/widgets/*"],
+  "@features/*": ["src/features/*"],
+  "@entities/*": ["src/entities/*"],
+  "@shared/*": ["src/shared/*"]
+}
+```
+
+### src/main.tsx
+
+파일을 읽고 import 및 render 부분을 변경:
+
+```tsx
+// 기존 (Vite 기본 생성)
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import App from './App.tsx'
+import './index.css'
+
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+    <App />
+  </StrictMode>,
 )
+
+// 변경
+import { createRoot } from 'react-dom/client'
+import { App } from '@app/index'
+
+createRoot(document.getElementById('root')!).render(<App />)
+```
+
+### index.html
+
+파일을 읽고 `<html>` 태그의 lang 속성 변경:
+
+```html
+// 기존
+<html lang="en">
+
+// 변경
+<html lang="ko">
 ```

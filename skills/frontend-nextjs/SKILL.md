@@ -1,6 +1,6 @@
 ---
 name: frontend-nextjs
-description: Next.js (App Router) 프론트엔드 프로젝트 구조를 생성합니다. Next.js 15, Feature-Sliced Design 아키텍처, shadcn/ui, Tailwind CSS, TypeScript 설정을 포함합니다.
+description: Next.js (App Router) 프론트엔드 프로젝트 구조를 생성합니다. Next.js 16, Feature-Sliced Design 아키텍처, shadcn/ui, Tailwind CSS, TypeScript, Biome, React Compiler 설정을 포함합니다.
 user-invocable: true
 ---
 
@@ -9,46 +9,80 @@ user-invocable: true
 Next.js (App Router) 프론트엔드 프로젝트 구조를 생성합니다.
 
 ## 역할
-- Next.js 15 + App Router 프로젝트 설정
-- Feature-Sliced Design (FSD) 아키텍처 (app/, pages/ 레이어 제외)
+- Next.js 16 + App Router + Turbopack 프로젝트 생성
+- Feature-Sliced Design (FSD) 아키텍처 구성
 - shadcn/ui + Tailwind CSS 설정
-- TypeScript 설정
+- TypeScript + Biome + React Compiler 설정
 
-## 생성 파일
+## 프로세스
 
+### 1단계: 프로젝트 생성
+
+```bash
+npx create-next-app@16 {project}/frontend --app --biome --react-compiler --yes
 ```
-frontend/
-├── app/                        # App Router (라우팅 + 레이아웃)
-│   ├── layout.tsx
-│   ├── page.tsx
-│   ├── loading.tsx
-│   ├── error.tsx
-│   ├── not-found.tsx
-│   └── api/
-│       └── health/route.ts
-├── src/
-│   ├── widgets/                # 독립적 UI 블록
-│   ├── features/               # 사용자 기능
-│   ├── entities/               # 비즈니스 엔티티
-│   └── shared/                 # 공용 모듈
-│       ├── api/
-│       ├── ui/
-│       ├── lib/
-│       ├── styles/
-│       │   └── global.scss      # Tailwind + CSS 변수
-│       └── config/
-├── public/
-├── package.json
-├── next.config.ts
-├── tailwind.config.ts
-├── postcss.config.mjs
-├── tsconfig.json
-└── components.json
+
+### 2단계: FSD 구조 추가
+
+```bash
+mkdir -p {project}/frontend/src/widgets
+mkdir -p {project}/frontend/src/features
+mkdir -p {project}/frontend/src/entities
+mkdir -p {project}/frontend/src/shared/api
+mkdir -p {project}/frontend/src/shared/ui
+mkdir -p {project}/frontend/src/shared/lib
+mkdir -p {project}/frontend/src/shared/styles
+mkdir -p {project}/frontend/src/shared/config
+```
+
+### 3단계: 파일 생성
+
+[template.md](template.md)의 `## 생성 파일` 섹션을 참고하여 `{project}/frontend/` 내에 아래 파일들을 생성:
+
+| 파일 | 설명 |
+|------|------|
+| `src/shared/index.ts` | shared 레이어 export |
+| `src/shared/api/index.ts` | API export |
+| `src/shared/api/client.ts` | API 클라이언트 |
+| `src/shared/ui/index.ts` | UI 컴포넌트 export |
+| `src/shared/lib/index.ts` | 유틸리티 export |
+| `src/shared/lib/utils.ts` | cn 함수 |
+| `src/shared/styles/global.scss` | Tailwind + CSS 변수 |
+| `app/loading.tsx` | 로딩 UI |
+| `app/error.tsx` | 에러 UI |
+| `app/not-found.tsx` | 404 페이지 |
+| `app/api/health/route.ts` | 헬스체크 API |
+| `components.json` | shadcn/ui 설정 |
+
+### 4단계: 기존 파일 수정
+
+[template.md](template.md)의 `## 수정 지시` 섹션을 참고하여 `{project}/frontend/` 내의 파일들을 수정:
+
+| 파일 | 수정 내용 |
+|------|----------|
+| `tsconfig.json` | `compilerOptions.paths`에 FSD alias 병합 (기존 paths 유지) |
+| `tailwind.config.ts` | `theme.extend`에 colors, borderRadius 병합, plugins 추가 |
+| `app/layout.tsx` | CSS import를 `@shared/styles/global.scss`로 변경 |
+
+### 5단계: 파일 정리
+
+`{project}/frontend/app/` 내 기존 CSS 파일 삭제 (존재하는 경우):
+
+```bash
+rm -f {project}/frontend/app/globals.css
+rm -f {project}/frontend/app/global.css
+```
+
+### 6단계: 의존성 추가
+
+```bash
+npm install --prefix {project}/frontend clsx tailwind-merge class-variance-authority lucide-react react-hook-form @hookform/resolvers zod
+npm install --prefix {project}/frontend -D sass tailwindcss-animate
 ```
 
 ## 템플릿
 
-[template.md](template.md) - Next.js 프로젝트 전체 boilerplate
+[template.md](template.md) - 생성할 파일 내용 및 수정 지시
 
 ## 테마 적용
 
