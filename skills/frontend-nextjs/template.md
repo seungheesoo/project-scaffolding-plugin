@@ -49,9 +49,9 @@ frontend/
     "lint": "next lint"
   },
   "dependencies": {
-    "next": "^15.0.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "next": "^16.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
     "react-hook-form": "^7.53.0",
     "@hookform/resolvers": "^3.9.0",
     "zod": "^3.23.0",
@@ -62,10 +62,10 @@ frontend/
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
-    "@types/react": "^18.3.12",
-    "@types/react-dom": "^18.3.1",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
     "eslint": "^9.13.0",
-    "eslint-config-next": "^15.0.0",
+    "eslint-config-next": "^16.0.0",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.15",
     "tailwindcss-animate": "^1.0.7",

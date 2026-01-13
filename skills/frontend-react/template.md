@@ -44,8 +44,8 @@ frontend/
     "lint": "eslint ."
   },
   "dependencies": {
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
     "react-router-dom": "^6.28.0",
     "react-hook-form": "^7.53.0",
     "@hookform/resolvers": "^3.9.0",
@@ -57,8 +57,8 @@ frontend/
   },
   "devDependencies": {
     "@eslint/js": "^9.13.0",
-    "@types/react": "^18.3.12",
-    "@types/react-dom": "^18.3.1",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
     "@vitejs/plugin-react": "^4.3.3",
     "autoprefixer": "^10.4.20",
     "eslint": "^9.13.0",

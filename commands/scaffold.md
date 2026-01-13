@@ -329,6 +329,13 @@ Skill("project-scaffolding:{skill-name}")
 | 사용 안함/기존 유지 | FastAPI | `## .gitlab-ci.yml (FastAPI Backend만 선택 시)` |
 | 기존 유지 | 기존 유지 | 생성 안함 |
 
+### Speckit 초기화 규칙
+
+| `specify --help` 결과 | 동작 |
+|----------------------|------|
+| 성공 | `{project}/`에서 `specify init --here --ai claude --no-git` 실행 |
+| 실패 | 건너뜀 |
+
 ---
 
 ## 생성 순서
@@ -340,4 +347,5 @@ Skill("project-scaffolding:{skill-name}")
 5. Backend
 6. Docker (`infra-docker` skill)
 7. GitLab CI (`infra-gitlab-ci` skill)
-8. 결과 트리 출력
+8. Speckit 초기화
+9. 결과 트리 출력
