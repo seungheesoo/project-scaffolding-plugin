@@ -24,8 +24,9 @@ shadcn/ui Neutral 테마를 적용합니다.
 | 파일 | 동작 |
 |------|------|
 | `global.scss` | 교체 없음 (boilerplate 기본값 사용) |
-| `tailwind.config.ts` | 수정 없음 |
 | `.claude/style-guide.md` | [style-guide.md](style-guide.md)의 `## 스타일 가이드` 헤딩부터 파일 끝까지 **복사** |
+
+> **Note**: Tailwind v4에서는 CSS-first 설정을 사용하므로 `tailwind.config.ts`가 필요 없습니다.
 
 ## 템플릿
 

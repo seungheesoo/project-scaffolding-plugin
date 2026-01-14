@@ -26,8 +26,9 @@ Lime-Cyan Dark 테마를 적용합니다.
 | 파일 | 동작 |
 |------|------|
 | `global.scss` | [style-guide.md](style-guide.md)의 `## CSS 변수 (global.scss 전체)` 내용으로 **전체 교체** |
-| `tailwind.config.ts` | `## Tailwind 확장 색상` 내용을 `colors` 객체에 **추가** |
 | `.claude/style-guide.md` | `## 스타일 가이드` 헤딩부터 파일 끝까지 **복사** |
+
+> **Note**: Tailwind v4에서는 `@theme` 지시어에 정의된 `--color-*` 변수가 자동으로 유틸리티 클래스로 변환됩니다. `tailwind.config.ts` 수정이 필요 없습니다.
 
 **global.scss 경로**:
 | Frontend | 경로 |

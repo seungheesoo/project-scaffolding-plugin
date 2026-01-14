@@ -2,209 +2,206 @@
 
 ## CSS 변수 (global.scss 전체)
 ```scss
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-@layer base {
-  :root {
-    /* ===== shadcn/ui 호환 변수 (HSL) ===== */
+@theme {
+  /* ===== shadcn/ui 호환 색상 ===== */
 
-    /* Primary - 라임 그린 */
-    --primary: 74 90% 69%;
-    --primary-foreground: 0 0% 0%;
+  /* Primary - 라임 그린 */
+  --color-primary: hsl(74 90% 69%);
+  --color-primary-foreground: hsl(0 0% 0%);
 
-    /* Secondary - 시안 */
-    --secondary: 195 95% 70%;
-    --secondary-foreground: 0 0% 0%;
+  /* Secondary - 시안 */
+  --color-secondary: hsl(195 95% 70%);
+  --color-secondary-foreground: hsl(0 0% 0%);
 
-    /* Background - 다크 */
-    --background: 220 6% 10%;
-    --foreground: 0 0% 100%;
+  /* Background - 다크 */
+  --color-background: hsl(220 6% 10%);
+  --color-foreground: hsl(0 0% 100%);
 
-    /* Card */
-    --card: 220 6% 13%;
-    --card-foreground: 0 0% 100%;
+  /* Card */
+  --color-card: hsl(220 6% 13%);
+  --color-card-foreground: hsl(0 0% 100%);
 
-    /* Popover */
-    --popover: 220 6% 13%;
-    --popover-foreground: 0 0% 100%;
+  /* Popover */
+  --color-popover: hsl(220 6% 13%);
+  --color-popover-foreground: hsl(0 0% 100%);
 
-    /* Muted */
-    --muted: 220 6% 18%;
-    --muted-foreground: 0 0% 60%;
+  /* Muted */
+  --color-muted: hsl(220 6% 18%);
+  --color-muted-foreground: hsl(0 0% 60%);
 
-    /* Accent */
-    --accent: 220 6% 18%;
-    --accent-foreground: 0 0% 100%;
+  /* Accent */
+  --color-accent: hsl(220 6% 18%);
+  --color-accent-foreground: hsl(0 0% 100%);
 
-    /* Destructive - 오렌지 레드 */
-    --destructive: 15 95% 55%;
-    --destructive-foreground: 0 0% 100%;
+  /* Destructive - 오렌지 레드 */
+  --color-destructive: hsl(15 95% 55%);
+  --color-destructive-foreground: hsl(0 0% 100%);
 
-    /* Success */
-    --success: 145 83% 45%;
-    --success-foreground: 0 0% 0%;
+  /* Success */
+  --color-success: hsl(145 83% 45%);
+  --color-success-foreground: hsl(0 0% 0%);
 
-    /* Warning */
-    --warning: 40 95% 60%;
-    --warning-foreground: 0 0% 0%;
+  /* Warning */
+  --color-warning: hsl(40 95% 60%);
+  --color-warning-foreground: hsl(0 0% 0%);
 
-    /* Border & Input */
-    --border: 0 0% 20%;
-    --input: 0 0% 20%;
-    --ring: 74 90% 69%;
+  /* Border & Input */
+  --color-border: hsl(0 0% 20%);
+  --color-input: hsl(0 0% 20%);
+  --color-ring: hsl(74 90% 69%);
 
-    /* Radius */
-    --radius: 0.5rem;
-
-    /* ===== 확장 변수 (HEX/RGBA) ===== */
-
-    /* Primary 확장 */
-    --primary-hex: #D6FB64;
-    --primary-hover: #C2F400;
-    --primary-light: #E1FC94;
-    --primary-bg: #F8FFE6;
-
-    /* Secondary 확장 */
-    --secondary-hex: #64D5FB;
-    --secondary-hover: #00C4F9;
-    --secondary-dark: #00AAF8;
-    --secondary-light: #A7E6FC;
-    --secondary-bg: #DDF5FE;
-
-    /* Semantic 확장 */
-    --success-hex: #14D450;
-    --success-light: #5DDD74;
-    --success-dark: #00CB27;
-    --danger: #FA5820;
-    --danger-light: #FB8964;
-    --danger-dark: #D34313;
-    --warning-hex: #FAC239;
-    --warning-light: #FBD564;
-    --warning-dark: #F6932C;
-
-    /* Background 확장 */
-    --bg-primary: #000000;
-    --bg-secondary: #121212;
-    --bg-tertiary: #1F2126;
-    --gray: #3C3E41;
-    --gray-light: #576370;
-
-    /* White Transparency */
-    --white-100: rgba(255, 255, 255, 1);
-    --white-80: rgba(255, 255, 255, 0.8);
-    --white-60: rgba(255, 255, 255, 0.6);
-    --white-40: rgba(255, 255, 255, 0.4);
-    --white-30: rgba(255, 255, 255, 0.3);
-    --white-20: rgba(255, 255, 255, 0.2);
-    --white-10: rgba(255, 255, 255, 0.1);
-    --white-5: rgba(255, 255, 255, 0.05);
-
-    /* Black Transparency */
-    --black-100: rgba(0, 0, 0, 1);
-    --black-80: rgba(0, 0, 0, 0.8);
-    --black-60: rgba(0, 0, 0, 0.6);
-    --black-50: rgba(0, 0, 0, 0.5);
-    --black-40: rgba(0, 0, 0, 0.4);
-    --black-30: rgba(0, 0, 0, 0.3);
-    --black-20: rgba(0, 0, 0, 0.2);
-    --black-10: rgba(0, 0, 0, 0.1);
-
-    /* Table */
-    --table-th: #3E4042;
-    --table-td: #28292D;
-    --table-even: #323436;
-    --table-selected: #263841;
-    --table-hover: #2B353B;
-
-    /* Typography */
-    --font-family: "Inter", "Pretendard", sans-serif;
-    --font-thin: 100;
-    --font-light: 300;
-    --font-regular: 400;
-    --font-medium: 500;
-    --font-semibold: 600;
-    --font-bold: 700;
-    --font-extrabold: 800;
-    --font-black: 900;
-
-    --font-size-32: 2rem;
-    --font-size-28: 1.75rem;
-    --font-size-24: 1.5rem;
-    --font-size-20: 1.25rem;
-    --font-size-18: 1.125rem;
-    --font-size-16: 1rem;
-    --font-size-14: 0.875rem;
-    --font-size-12: 0.75rem;
-    --font-size-10: 0.625rem;
-
-    --line-height-180: 1.8;
-    --line-height-160: 1.6;
-    --line-height-140: 1.4;
-    --line-height-120: 1.2;
-
-    /* Spacing */
-    --spacing-4: 4px;
-    --spacing-8: 8px;
-    --spacing-12: 12px;
-    --spacing-16: 16px;
-    --spacing-20: 20px;
-    --spacing-24: 24px;
-    --spacing-32: 32px;
-    --spacing-40: 40px;
-    --spacing-48: 48px;
-    --spacing-64: 64px;
-
-    /* Form */
-    --form-height-56: 56px;
-    --form-height-48: 48px;
-    --form-height-40: 40px;
-    --form-height-32: 32px;
-    --form-height-24: 24px;
-
-    /* Border Radius */
-    --radius-xl: 16px;
-    --radius-md: 8px;
-    --radius-sm: 4px;
-
-    /* Shadow */
-    --shadow-default: 0 3px 2px 0 rgba(0, 0, 0, 0.06), 0 1px 2px 0 rgba(0, 0, 0, 0.1);
-    --shadow-dropdown: 0 10px 10px rgba(0, 0, 0, 0.1);
-    --shadow-focus: 0 0 4px rgba(0, 255, 72, 0.3);
-
-    /* Transition */
-    --transition-default: all 0.2s linear;
-    --transition-border: border 0.5s linear, background 0.3s linear;
-    --transition-hover: 0.2s cubic-bezier(0.55, 0.09, 0.68, 0.53);
-
-    /* Gradient */
-    --gradient-main: linear-gradient(90deg, #00C4F9 0%, #36D2D4 25%, #6BE0AF 50%, #A1ED89 75%, #D6FB64 100%);
-    --gradient-bg: linear-gradient(287.56deg, #121212 0%, #1F2126 100%);
-  }
+  /* Radius */
+  --radius: 0.5rem;
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
 }
 
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-    font-feature-settings: "rlig" 1, "calt" 1;
-  }
+/* ===== 확장 변수 (HEX/RGBA) ===== */
+:root {
+  /* Primary 확장 */
+  --primary-hex: #D6FB64;
+  --primary-hover: #C2F400;
+  --primary-light: #E1FC94;
+  --primary-bg: #F8FFE6;
+
+  /* Secondary 확장 */
+  --secondary-hex: #64D5FB;
+  --secondary-hover: #00C4F9;
+  --secondary-dark: #00AAF8;
+  --secondary-light: #A7E6FC;
+  --secondary-bg: #DDF5FE;
+
+  /* Semantic 확장 */
+  --success-hex: #14D450;
+  --success-light: #5DDD74;
+  --success-dark: #00CB27;
+  --danger: #FA5820;
+  --danger-light: #FB8964;
+  --danger-dark: #D34313;
+  --warning-hex: #FAC239;
+  --warning-light: #FBD564;
+  --warning-dark: #F6932C;
+
+  /* Background 확장 */
+  --bg-primary: #000000;
+  --bg-secondary: #121212;
+  --bg-tertiary: #1F2126;
+  --gray: #3C3E41;
+  --gray-light: #576370;
+
+  /* White Transparency */
+  --white-100: rgba(255, 255, 255, 1);
+  --white-80: rgba(255, 255, 255, 0.8);
+  --white-60: rgba(255, 255, 255, 0.6);
+  --white-40: rgba(255, 255, 255, 0.4);
+  --white-30: rgba(255, 255, 255, 0.3);
+  --white-20: rgba(255, 255, 255, 0.2);
+  --white-10: rgba(255, 255, 255, 0.1);
+  --white-5: rgba(255, 255, 255, 0.05);
+
+  /* Black Transparency */
+  --black-100: rgba(0, 0, 0, 1);
+  --black-80: rgba(0, 0, 0, 0.8);
+  --black-60: rgba(0, 0, 0, 0.6);
+  --black-50: rgba(0, 0, 0, 0.5);
+  --black-40: rgba(0, 0, 0, 0.4);
+  --black-30: rgba(0, 0, 0, 0.3);
+  --black-20: rgba(0, 0, 0, 0.2);
+  --black-10: rgba(0, 0, 0, 0.1);
+
+  /* Table */
+  --table-th: #3E4042;
+  --table-td: #28292D;
+  --table-even: #323436;
+  --table-selected: #263841;
+  --table-hover: #2B353B;
+
+  /* Typography */
+  --font-family: "Inter", "Pretendard", sans-serif;
+  --font-thin: 100;
+  --font-light: 300;
+  --font-regular: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+  --font-extrabold: 800;
+  --font-black: 900;
+
+  --font-size-32: 2rem;
+  --font-size-28: 1.75rem;
+  --font-size-24: 1.5rem;
+  --font-size-20: 1.25rem;
+  --font-size-18: 1.125rem;
+  --font-size-16: 1rem;
+  --font-size-14: 0.875rem;
+  --font-size-12: 0.75rem;
+  --font-size-10: 0.625rem;
+
+  --line-height-180: 1.8;
+  --line-height-160: 1.6;
+  --line-height-140: 1.4;
+  --line-height-120: 1.2;
+
+  /* Spacing */
+  --spacing-4: 4px;
+  --spacing-8: 8px;
+  --spacing-12: 12px;
+  --spacing-16: 16px;
+  --spacing-20: 20px;
+  --spacing-24: 24px;
+  --spacing-32: 32px;
+  --spacing-40: 40px;
+  --spacing-48: 48px;
+  --spacing-64: 64px;
+
+  /* Form */
+  --form-height-56: 56px;
+  --form-height-48: 48px;
+  --form-height-40: 40px;
+  --form-height-32: 32px;
+  --form-height-24: 24px;
+
+  /* Border Radius */
+  --radius-xl: 16px;
+
+  /* Shadow */
+  --shadow-default: 0 3px 2px 0 rgba(0, 0, 0, 0.06), 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+  --shadow-dropdown: 0 10px 10px rgba(0, 0, 0, 0.1);
+  --shadow-focus: 0 0 4px rgba(0, 255, 72, 0.3);
+
+  /* Transition */
+  --transition-default: all 0.2s linear;
+  --transition-border: border 0.5s linear, background 0.3s linear;
+  --transition-hover: 0.2s cubic-bezier(0.55, 0.09, 0.68, 0.53);
+
+  /* Gradient */
+  --gradient-main: linear-gradient(90deg, #00C4F9 0%, #36D2D4 25%, #6BE0AF 50%, #A1ED89 75%, #D6FB64 100%);
+  --gradient-bg: linear-gradient(287.56deg, #121212 0%, #1F2126 100%);
+}
+
+* {
+  border-color: var(--color-border);
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  font-feature-settings: "rlig" 1, "calt" 1;
 }
 ```
 
-## Tailwind 확장 색상
-```typescript
-success: {
-  DEFAULT: 'hsl(var(--success))',
-  foreground: 'hsl(var(--success-foreground))',
-},
-warning: {
-  DEFAULT: 'hsl(var(--warning))',
-  foreground: 'hsl(var(--warning-foreground))',
-},
+## Tailwind v4 색상 사용법
+
+Tailwind v4에서는 `@theme`에 정의된 `--color-*` 변수가 자동으로 유틸리티 클래스로 변환됩니다:
+
+```tsx
+// 예시: success, warning 색상 사용
+<div className="bg-success text-success-foreground">성공</div>
+<div className="bg-warning text-warning-foreground">경고</div>
+<div className="text-destructive">에러</div>
 ```
 
 ## 스타일 가이드
