@@ -144,65 +144,64 @@ export function cn(...inputs: ClassValue[]) {
 
 ### frontend/src/shared/styles/global.scss
 ```scss
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
-    --primary: 0 0% 9%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 9%;
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
-    --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 9%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --ring: 0 0% 3.9%;
-    --radius: 0.5rem;
-  }
-
-  .dark {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 0 0% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
-    --accent: 0 0% 14.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
-  }
+@theme {
+  --color-background: hsl(0 0% 100%);
+  --color-foreground: hsl(0 0% 3.9%);
+  --color-card: hsl(0 0% 100%);
+  --color-card-foreground: hsl(0 0% 3.9%);
+  --color-popover: hsl(0 0% 100%);
+  --color-popover-foreground: hsl(0 0% 3.9%);
+  --color-primary: hsl(0 0% 9%);
+  --color-primary-foreground: hsl(0 0% 98%);
+  --color-secondary: hsl(0 0% 96.1%);
+  --color-secondary-foreground: hsl(0 0% 9%);
+  --color-muted: hsl(0 0% 96.1%);
+  --color-muted-foreground: hsl(0 0% 45.1%);
+  --color-accent: hsl(0 0% 96.1%);
+  --color-accent-foreground: hsl(0 0% 9%);
+  --color-destructive: hsl(0 84.2% 60.2%);
+  --color-destructive-foreground: hsl(0 0% 98%);
+  --color-border: hsl(0 0% 89.8%);
+  --color-input: hsl(0 0% 89.8%);
+  --color-ring: hsl(0 0% 3.9%);
+  --radius: 0.5rem;
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
 }
 
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-    font-feature-settings: "rlig" 1, "calt" 1;
-  }
+.dark {
+  --color-background: hsl(0 0% 3.9%);
+  --color-foreground: hsl(0 0% 98%);
+  --color-card: hsl(0 0% 3.9%);
+  --color-card-foreground: hsl(0 0% 98%);
+  --color-popover: hsl(0 0% 3.9%);
+  --color-popover-foreground: hsl(0 0% 98%);
+  --color-primary: hsl(0 0% 98%);
+  --color-primary-foreground: hsl(0 0% 9%);
+  --color-secondary: hsl(0 0% 14.9%);
+  --color-secondary-foreground: hsl(0 0% 98%);
+  --color-muted: hsl(0 0% 14.9%);
+  --color-muted-foreground: hsl(0 0% 63.9%);
+  --color-accent: hsl(0 0% 14.9%);
+  --color-accent-foreground: hsl(0 0% 98%);
+  --color-destructive: hsl(0 62.8% 30.6%);
+  --color-destructive-foreground: hsl(0 0% 98%);
+  --color-border: hsl(0 0% 14.9%);
+  --color-input: hsl(0 0% 14.9%);
+  --color-ring: hsl(0 0% 83.1%);
+}
+
+* {
+  border-color: var(--color-border);
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  font-feature-settings: "rlig" 1, "calt" 1;
 }
 ```
 
@@ -279,7 +278,7 @@ export async function GET() {
   "rsc": true,
   "tsx": true,
   "tailwind": {
-    "config": "tailwind.config.ts",
+    "config": "",
     "css": "src/shared/styles/global.scss",
     "baseColor": "neutral",
     "cssVariables": true
@@ -310,78 +309,6 @@ export async function GET() {
 "@features/*": ["src/features/*"],
 "@entities/*": ["src/entities/*"],
 "@shared/*": ["src/shared/*"]
-```
-
-### tailwind.config.ts
-
-파일을 읽고 아래 수정사항을 적용:
-
-**1. 파일 상단에 import 추가:**
-```typescript
-import tailwindcssAnimate from 'tailwindcss-animate'
-```
-
-**2. config 객체에 `darkMode` 추가:**
-```typescript
-darkMode: ['class'],
-```
-
-**3. `content` 배열에 `src` 경로 추가 (기존 항목 유지):**
-```typescript
-'./src/**/*.{ts,tsx}',
-```
-
-**4. `theme.extend`에 `colors` 객체 추가:**
-```typescript
-colors: {
-  background: 'hsl(var(--background))',
-  foreground: 'hsl(var(--foreground))',
-  card: {
-    DEFAULT: 'hsl(var(--card))',
-    foreground: 'hsl(var(--card-foreground))',
-  },
-  popover: {
-    DEFAULT: 'hsl(var(--popover))',
-    foreground: 'hsl(var(--popover-foreground))',
-  },
-  primary: {
-    DEFAULT: 'hsl(var(--primary))',
-    foreground: 'hsl(var(--primary-foreground))',
-  },
-  secondary: {
-    DEFAULT: 'hsl(var(--secondary))',
-    foreground: 'hsl(var(--secondary-foreground))',
-  },
-  muted: {
-    DEFAULT: 'hsl(var(--muted))',
-    foreground: 'hsl(var(--muted-foreground))',
-  },
-  accent: {
-    DEFAULT: 'hsl(var(--accent))',
-    foreground: 'hsl(var(--accent-foreground))',
-  },
-  destructive: {
-    DEFAULT: 'hsl(var(--destructive))',
-    foreground: 'hsl(var(--destructive-foreground))',
-  },
-  border: 'hsl(var(--border))',
-  input: 'hsl(var(--input))',
-  ring: 'hsl(var(--ring))',
-},
-```
-
-**5. `theme.extend`에 `borderRadius` 객체 추가:**
-```typescript
-borderRadius: {
-  lg: 'var(--radius)',
-  md: 'calc(var(--radius) - 2px)',
-  sm: 'calc(var(--radius) - 4px)',
-},
-```
-
-**6. `plugins` 배열에 추가:**
-```typescript
-plugins: [tailwindcssAnimate],
 ```
 
 ### app/layout.tsx

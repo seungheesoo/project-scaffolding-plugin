@@ -63,7 +63,6 @@ mkdir -p {project}/frontend/src/shared/config
 | 파일 | 수정 내용 |
 |------|----------|
 | `tsconfig.json` | `compilerOptions.paths`에 FSD alias 병합 (기존 paths 유지) |
-| `tailwind.config.ts` | `theme.extend`에 colors, borderRadius 병합, plugins 추가 |
 | `app/layout.tsx` | CSS import를 `@shared/styles/global.scss`로 변경 |
 
 ### 5단계: 파일 정리
@@ -79,7 +78,7 @@ rm -f {project}/frontend/app/global.css
 
 ```bash
 npm install --prefix {project}/frontend zustand immer @tanstack/react-query clsx tailwind-merge class-variance-authority lucide-react react-hook-form @hookform/resolvers zod
-npm install --prefix {project}/frontend -D sass tailwindcss-animate
+npm install --prefix {project}/frontend -D sass
 ```
 
 ## 템플릿
