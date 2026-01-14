@@ -65,7 +65,7 @@ mkdir -p {project}/frontend/src/shared/config
 | 파일 | 수정 내용 |
 |------|----------|
 | `vite.config.ts` | Tailwind v4 플러그인 추가, `resolve.alias`에 FSD alias 추가 |
-| `tsconfig.json` | `compilerOptions.paths`에 FSD alias 병합 (기존 paths 유지) |
+| `tsconfig.json` | `baseUrl` 추가, `compilerOptions.paths`에 FSD alias 병합 |
 | `src/main.tsx` | App import 경로를 `@app/index`로 변경 |
 | `index.html` | lang 속성을 `ko`로 변경 |
 

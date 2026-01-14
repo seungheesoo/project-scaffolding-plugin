@@ -62,7 +62,7 @@ mkdir -p {project}/frontend/src/shared/config
 
 | 파일 | 수정 내용 |
 |------|----------|
-| `tsconfig.json` | `compilerOptions.paths`에 FSD alias 병합 (기존 paths 유지) |
+| `tsconfig.json` | `baseUrl` 추가, `compilerOptions.paths`에 FSD alias 병합 |
 | `app/layout.tsx` | CSS import를 `@shared/styles/global.scss`로 변경 |
 
 ### 5단계: 파일 정리

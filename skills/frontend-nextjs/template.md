@@ -302,8 +302,14 @@ export async function GET() {
 
 ### tsconfig.json
 
-파일을 읽고 `compilerOptions.paths` 객체에 아래 항목들을 병합 (기존 paths 유지):
+파일을 읽고 `compilerOptions`에 아래 항목들을 추가/병합:
 
+**1. `baseUrl` 추가 (없는 경우):**
+```json
+"baseUrl": "."
+```
+
+**2. `paths` 객체에 FSD alias 병합 (기존 paths 유지):**
 ```json
 "@widgets/*": ["src/widgets/*"],
 "@features/*": ["src/features/*"],
