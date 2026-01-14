@@ -21,20 +21,61 @@ src/
 └── shared/     # 공용 유틸, UI 키트, API 클라이언트
 ```
 
-**Next.js (App Router)** - `app/`, `pages/` 레이어 제외 (App Router가 담당):
+**Next.js (App Router)** - FSD 공식 권장 구조:
 ```
-app/            # Next.js App Router (라우팅, 레이아웃, 페이지)
+app/            # Next.js App Router (라우팅, page.tsx만 재내보내기)
 src/
+├── app/        # FSD app 레이어 (providers, 전역 설정)
+├── pages/      # FSD pages 레이어 (페이지 컴포넌트)
 ├── widgets/    # 독립적 UI 블록
 ├── features/   # 사용자 액션
 ├── entities/   # 비즈니스 엔티티
 └── shared/     # 공용 모듈
 ```
 
+> **재내보내기 패턴**: Next.js `app/` 폴더에서 FSD `src/pages/`를 import하여 재내보내기
+> ```tsx
+> // app/login/page.tsx
+> import { LoginPage } from '@pages/login'
+> export default LoginPage
+> ```
+
+#### Next.js 페이지 생성 규칙
+
+**새 페이지 생성 시 (예: `/login` 페이지):**
+1. `src/pages/login/index.tsx` - 페이지 컴포넌트 작성
+2. `app/login/page.tsx` - 재내보내기만 (위 예시 참고)
+
+**`app/` 폴더 파일 구분:**
+| 파일 유형 | 처리 방식 | 이유 |
+|----------|----------|------|
+| `page.tsx` | 재내보내기 | FSD 페이지 레이어에서 관리 |
+| `layout.tsx` | 직접 구현 | Next.js 레이아웃 시스템 |
+| `loading.tsx` | 직접 구현 | Next.js Suspense 경계 |
+| `error.tsx` | 직접 구현 | Next.js 에러 경계 |
+| `not-found.tsx` | 직접 구현 | Next.js 404 처리 |
+| `api/*/route.ts` | 직접 구현 | API Routes |
+
+**페이지 컴포넌트 구조 (`src/pages/login/index.tsx`):**
+```tsx
+// widgets, features, entities, shared에서 조합
+import { LoginForm } from '@features/auth'
+import { Logo } from '@shared/ui'
+
+export function LoginPage() {
+  return (
+    <div>
+      <Logo />
+      <LoginForm />
+    </div>
+  )
+}
+```
+
 ### 의존성 규칙
 - **단방향 의존성**: 상위 레이어만 하위 레이어 import 가능
 - React: app → pages → widgets → features → entities → shared
-- Next.js: app/ → widgets → features → entities → shared
+- Next.js: app/ (Next.js) → src/app → src/pages → widgets → features → entities → shared
 - 같은 레이어 간 import 금지 (features끼리 서로 참조 X)
 
 ### 슬라이스 내부 구조
@@ -106,7 +147,13 @@ import { LoginForm } from '@features/auth/ui/LoginForm'
 | `@pages` | `src/pages` | 페이지 컴포넌트 |
 | `@app` | `src/app` | 앱 초기화, 라우터 |
 
-**Next.js (App Router)**: `@pages`, `@app` 사용 안함 - `app/` 디렉토리가 라우팅 담당
+**Next.js (App Router)**:
+| Alias | 경로 | 용도 |
+|-------|------|------|
+| `@pages` | `src/pages` | FSD 페이지 컴포넌트 |
+| `@app` | `src/app` | FSD app 레이어 (providers) |
+
+> Next.js `app/` 폴더는 라우팅 전용, FSD 페이지는 `src/pages/`에 작성
 
 ```typescript
 // Good - alias 사용

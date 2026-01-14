@@ -25,6 +25,8 @@ npx create-next-app@16 {project}/frontend --app --biome --react-compiler --yes
 ### 2단계: FSD 구조 추가
 
 ```bash
+mkdir -p {project}/frontend/src/app/providers
+mkdir -p {project}/frontend/src/pages/home
 mkdir -p {project}/frontend/src/widgets
 mkdir -p {project}/frontend/src/features
 mkdir -p {project}/frontend/src/entities
@@ -39,23 +41,36 @@ mkdir -p {project}/frontend/src/shared/config
 
 [template.md](template.md)의 `## 생성 파일` 섹션을 참고하여 `{project}/frontend/` 내에 아래 파일들을 생성:
 
+**FSD 레이어 파일:**
 | 파일 | 설명 |
 |------|------|
+| `src/app/index.ts` | FSD app 레이어 export |
+| `src/app/providers/index.ts` | Provider barrel |
+| `src/app/providers/QueryProvider.tsx` | React Query Provider |
+| `src/pages/home/index.tsx` | 홈 페이지 컴포넌트 |
 | `src/shared/index.ts` | shared 레이어 export |
 | `src/shared/api/index.ts` | API export |
 | `src/shared/api/client.ts` | API 클라이언트 |
 | `src/shared/ui/index.ts` | UI 컴포넌트 export |
 | `src/shared/lib/index.ts` | 유틸리티 export |
-| `src/shared/lib/providers/index.ts` | Provider barrel |
-| `src/shared/lib/providers/QueryProvider.tsx` | React Query Provider |
 | `src/shared/lib/utils.ts` | cn 함수 |
 | `src/shared/styles/global.scss` | Tailwind + CSS 변수 |
-| `app/page.tsx` | 랜딩 페이지 |
-| `app/loading.tsx` | 로딩 UI |
-| `app/error.tsx` | 에러 UI |
-| `app/not-found.tsx` | 404 페이지 |
-| `app/api/health/route.ts` | 헬스체크 API |
+
+**Next.js App Router 파일:**
+| 파일 | 설명 |
+|------|------|
+| `app/page.tsx` | 재내보내기 (`@pages/home` → default export) |
+| `app/loading.tsx` | 로딩 UI (직접 구현) |
+| `app/error.tsx` | 에러 UI (직접 구현) |
+| `app/not-found.tsx` | 404 페이지 (직접 구현) |
+| `app/api/health/route.ts` | 헬스체크 API (직접 구현) |
+
+**설정 파일:**
+| 파일 | 설명 |
+|------|------|
 | `components.json` | shadcn/ui 설정 |
+
+> **Note**: `app/page.tsx`만 재내보내기, 나머지 `app/` 파일들은 직접 구현
 
 ### 4단계: 기존 파일 수정
 
@@ -63,8 +78,8 @@ mkdir -p {project}/frontend/src/shared/config
 
 | 파일 | 수정 내용 |
 |------|----------|
-| `tsconfig.json` | `baseUrl` 추가, `compilerOptions.paths`에 FSD alias 병합 |
-| `app/layout.tsx` | CSS import를 `@shared/styles/global.scss`로 변경 |
+| `tsconfig.json` | `baseUrl` 추가, `compilerOptions.paths`에 FSD alias 병합 (`@app`, `@pages` 포함) |
+| `app/layout.tsx` | CSS import를 `@shared/styles/global.scss`로 변경, QueryProvider 추가 |
 
 ### 5단계: 파일 정리
 
