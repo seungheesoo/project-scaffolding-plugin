@@ -56,8 +56,6 @@ mkdir -p {project}/frontend/src/shared/config
 | `src/shared/ui/index.ts` | UI 컴포넌트 export |
 | `src/shared/lib/index.ts` | 유틸리티 export |
 | `src/shared/lib/utils.ts` | cn 함수 |
-| `tailwind.config.ts` | Tailwind 설정 |
-| `postcss.config.mjs` | PostCSS 설정 |
 | `components.json` | shadcn/ui 설정 |
 
 ### 4단계: 기존 파일 수정
@@ -66,7 +64,7 @@ mkdir -p {project}/frontend/src/shared/config
 
 | 파일 | 수정 내용 |
 |------|----------|
-| `vite.config.ts` | `resolve.alias`에 FSD alias 추가 |
+| `vite.config.ts` | Tailwind v4 플러그인 추가, `resolve.alias`에 FSD alias 추가 |
 | `tsconfig.json` | `compilerOptions.paths`에 FSD alias 병합 (기존 paths 유지) |
 | `src/main.tsx` | App import 경로를 `@app/index`로 변경 |
 | `index.html` | lang 속성을 `ko`로 변경 |
@@ -85,7 +83,7 @@ rm -f {project}/frontend/src/index.css
 
 ```bash
 npm install --prefix {project}/frontend react-router-dom zustand immer @tanstack/react-query clsx tailwind-merge class-variance-authority lucide-react react-hook-form @hookform/resolvers zod
-npm install --prefix {project}/frontend -D tailwindcss postcss autoprefixer sass tailwindcss-animate
+npm install --prefix {project}/frontend -D @tailwindcss/vite sass
 ```
 
 ## 템플릿
