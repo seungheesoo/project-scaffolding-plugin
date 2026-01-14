@@ -49,7 +49,7 @@ mkdir -p {project}/frontend/src/shared/config
 | `src/app/providers/QueryProvider.tsx` | React Query Provider |
 | `src/app/router/index.tsx` | 라우터 설정 |
 | `src/app/styles/global.scss` | Tailwind + CSS 변수 |
-| `src/pages/home/index.tsx` | 홈 페이지 |
+| `src/pages/home/index.tsx` | 랜딩 페이지 |
 | `src/shared/index.ts` | shared 레이어 export |
 | `src/shared/api/index.ts` | API export |
 | `src/shared/api/client.ts` | API 클라이언트 |

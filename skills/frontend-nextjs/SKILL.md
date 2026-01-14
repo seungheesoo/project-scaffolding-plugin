@@ -50,6 +50,7 @@ mkdir -p {project}/frontend/src/shared/config
 | `src/shared/lib/providers/QueryProvider.tsx` | React Query Provider |
 | `src/shared/lib/utils.ts` | cn 함수 |
 | `src/shared/styles/global.scss` | Tailwind + CSS 변수 |
+| `app/page.tsx` | 랜딩 페이지 |
 | `app/loading.tsx` | 로딩 UI |
 | `app/error.tsx` | 에러 UI |
 | `app/not-found.tsx` | 404 페이지 |
