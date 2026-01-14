@@ -176,6 +176,379 @@ import styles from './Component.module.css'
 - 전역 상태: Zustand
 - 서버 상태: React Query
 
+#### Zustand 스토어 (클라이언트 상태)
+
+스토어 위치: 각 feature/entity의 `model/store.ts`
+
+```typescript
+// features/auth/model/store.ts
+import { create } from 'zustand'
+import { devtools } from 'zustand/middleware'
+import { immer } from 'zustand/middleware/immer'
+import type { User } from './types'
+
+interface AuthState {
+  user: User | null
+  isAuthenticated: boolean
+  setUser: (user: User | null) => void
+  logout: () => void
+}
+
+export const useAuthStore = create<AuthState>()(
+  devtools(
+    immer((set) => ({
+      user: null,
+      isAuthenticated: false,
+      setUser: (user) =>
+        set((state) => {
+          state.user = user
+          state.isAuthenticated = !!user
+        }),
+      logout: () =>
+        set((state) => {
+          state.user = null
+          state.isAuthenticated = false
+        }),
+    }))
+  )
+)
+```
+
+```typescript
+// features/cart/model/store.ts
+import { create } from 'zustand'
+import { devtools } from 'zustand/middleware'
+import { immer } from 'zustand/middleware/immer'
+import type { CartItem } from './types'
+
+interface CartState {
+  items: CartItem[]
+  addItem: (item: CartItem) => void
+  removeItem: (id: string) => void
+  updateQuantity: (id: string, quantity: number) => void
+  clearCart: () => void
+  totalPrice: () => number
+}
+
+export const useCartStore = create<CartState>()(
+  devtools(
+    immer((set, get) => ({
+      items: [],
+      addItem: (item) =>
+        set((state) => {
+          const existing = state.items.find((i) => i.id === item.id)
+          if (existing) {
+            existing.quantity += 1
+          } else {
+            state.items.push({ ...item, quantity: 1 })
+          }
+        }),
+      removeItem: (id) =>
+        set((state) => {
+          const index = state.items.findIndex((i) => i.id === id)
+          if (index !== -1) state.items.splice(index, 1)
+        }),
+      updateQuantity: (id, quantity) =>
+        set((state) => {
+          const item = state.items.find((i) => i.id === id)
+          if (item) item.quantity = quantity
+        }),
+      clearCart: () =>
+        set((state) => {
+          state.items = []
+        }),
+      totalPrice: () =>
+        get().items.reduce((sum, item) => sum + item.price * item.quantity, 0),
+    }))
+  )
+)
+```
+
+#### React Query (서버 상태)
+
+쿼리/뮤테이션 위치: 각 feature/entity의 `api/` 세그먼트
+
+**타입 정의** (`model/types.ts`):
+```typescript
+// entities/user/model/types.ts
+export interface User {
+  id: string
+  name: string
+  email: string
+  createdAt: string
+}
+
+export interface UserFilters {
+  search?: string
+  role?: string
+  page?: number
+  limit?: number
+}
+
+export interface PaginatedResponse<T> {
+  data: T[]
+  meta: {
+    total: number
+    page: number
+    limit: number
+    totalPages: number
+  }
+}
+
+export type CreateUserInput = Pick<User, 'name' | 'email'>
+export type UpdateUserInput = Partial<CreateUserInput>
+```
+
+**Query Key 팩토리 패턴** (`api/keys.ts`):
+```typescript
+// entities/user/api/keys.ts
+import type { UserFilters } from '../model/types'
+
+export const userKeys = {
+  all: ['users'] as const,
+  lists: () => [...userKeys.all, 'list'] as const,
+  list: (filters?: UserFilters) => [...userKeys.lists(), filters] as const,
+  details: () => [...userKeys.all, 'detail'] as const,
+  detail: (id: string) => [...userKeys.details(), id] as const,
+}
+```
+
+**쿼리 훅** (`api/queries.ts`):
+```typescript
+// entities/user/api/queries.ts
+import { useQuery, useInfiniteQuery } from '@tanstack/react-query'
+import { apiClient } from '@shared/api'
+import { userKeys } from './keys'
+import type { User, UserFilters, PaginatedResponse } from '../model/types'
+
+export function useUsersQuery(filters?: UserFilters) {
+  return useQuery({
+    queryKey: userKeys.list(filters),
+    queryFn: () =>
+      apiClient<PaginatedResponse<User>>('/users', {
+        params: filters,
+      }),
+  })
+}
+
+export function useUserQuery(id: string) {
+  return useQuery({
+    queryKey: userKeys.detail(id),
+    queryFn: () => apiClient<User>(`/users/${id}`),
+    enabled: !!id,
+  })
+}
+
+// 무한 스크롤
+export function useUsersInfiniteQuery(filters?: Omit<UserFilters, 'page'>) {
+  return useInfiniteQuery({
+    queryKey: userKeys.list(filters),
+    queryFn: ({ pageParam = 1 }) =>
+      apiClient<PaginatedResponse<User>>('/users', {
+        params: { ...filters, page: pageParam },
+      }),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) =>
+      lastPage.meta.page < lastPage.meta.totalPages
+        ? lastPage.meta.page + 1
+        : undefined,
+  })
+}
+```
+
+**뮤테이션 훅** (`api/mutations.ts`):
+```typescript
+// entities/user/api/mutations.ts
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { apiClient } from '@shared/api'
+import { userKeys } from './keys'
+import type { User, CreateUserInput, UpdateUserInput } from '../model/types'
+
+export function useCreateUserMutation() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: (data: CreateUserInput) =>
+      apiClient<User>('/users', {
+        method: 'POST',
+        body: data,
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: userKeys.lists() })
+    },
+  })
+}
+
+export function useUpdateUserMutation() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: ({ id, data }: { id: string; data: UpdateUserInput }) =>
+      apiClient<User>(`/users/${id}`, {
+        method: 'PATCH',
+        body: data,
+      }),
+    onSuccess: (_, { id }) => {
+      queryClient.invalidateQueries({ queryKey: userKeys.detail(id) })
+      queryClient.invalidateQueries({ queryKey: userKeys.lists() })
+    },
+  })
+}
+
+export function useDeleteUserMutation() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: (id: string) =>
+      apiClient(`/users/${id}`, { method: 'DELETE' }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: userKeys.lists() })
+    },
+  })
+}
+```
+
+**낙관적 업데이트 예시**:
+```typescript
+// features/todo/api/mutations.ts
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { apiClient } from '@shared/api'
+import { todoKeys } from './keys'
+import type { Todo } from '../model/types'
+
+export function useToggleTodoMutation() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: ({ id, completed }: { id: string; completed: boolean }) =>
+      apiClient<Todo>(`/todos/${id}`, {
+        method: 'PATCH',
+        body: { completed },
+      }),
+    onMutate: async ({ id, completed }) => {
+      // 진행 중인 쿼리 취소
+      await queryClient.cancelQueries({ queryKey: todoKeys.detail(id) })
+
+      // 이전 데이터 백업
+      const previous = queryClient.getQueryData<Todo>(todoKeys.detail(id))
+
+      // 낙관적 업데이트
+      queryClient.setQueryData<Todo>(todoKeys.detail(id), (old) =>
+        old ? { ...old, completed } : old
+      )
+
+      return { previous, id }
+    },
+    onError: (_, __, context) => {
+      // 에러 시 롤백
+      if (context?.previous) {
+        queryClient.setQueryData(todoKeys.detail(context.id), context.previous)
+      }
+    },
+    onSettled: (_, __, { id }) => {
+      // 완료 후 캐시 무효화
+      queryClient.invalidateQueries({ queryKey: todoKeys.detail(id) })
+    },
+  })
+}
+```
+
+**무한 스크롤 컴포넌트 사용 예시**:
+```typescript
+// widgets/user-list/ui/UserInfiniteList.tsx
+import { useEffect } from 'react'
+import { useInView } from 'react-intersection-observer'
+import { useUsersInfiniteQuery, UserCard } from '@entities/user'
+
+export function UserInfiniteList() {
+  const { ref, inView } = useInView()
+  const {
+    data,
+    isLoading,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useUsersInfiniteQuery()
+
+  useEffect(() => {
+    if (inView && hasNextPage) {
+      fetchNextPage()
+    }
+  }, [inView, hasNextPage, fetchNextPage])
+
+  if (isLoading) return <div>Loading...</div>
+  if (error) return <div>Error: {error.message}</div>
+
+  return (
+    <div className="space-y-4">
+      {data?.pages.map((page) =>
+        page.data.map((user) => <UserCard key={user.id} user={user} />)
+      )}
+
+      <div ref={ref}>
+        {isFetchingNextPage ? <div>Loading more...</div> : null}
+      </div>
+    </div>
+  )
+}
+```
+
+#### Barrel 파일 export
+
+```typescript
+// entities/user/index.ts
+// UI
+export { UserCard } from './ui/UserCard'
+export { UserAvatar } from './ui/UserAvatar'
+
+// Model (Zustand)
+export { useUserStore } from './model/store'
+export type { User, UserFilters, PaginatedResponse } from './model/types'
+
+// API (React Query)
+export { userKeys } from './api/keys'
+export {
+  useUsersQuery,
+  useUserQuery,
+  useUsersInfiniteQuery,
+} from './api/queries'
+export {
+  useCreateUserMutation,
+  useUpdateUserMutation,
+  useDeleteUserMutation,
+} from './api/mutations'
+```
+
+#### 컴포넌트에서 사용
+
+```typescript
+// widgets/user-list/ui/UserList.tsx
+import { useUsersQuery, useDeleteUserMutation, UserCard } from '@entities/user'
+import { useAuthStore } from '@features/auth'
+
+export function UserList() {
+  const { data: users, isLoading, error } from useUsersQuery()
+  const deleteUser = useDeleteUserMutation()
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
+
+  if (isLoading) return <div>Loading...</div>
+  if (error) return <div>Error: {error.message}</div>
+
+  return (
+    <div className="grid gap-4">
+      {users?.map((user) => (
+        <UserCard
+          key={user.id}
+          user={user}
+          onDelete={isAuthenticated ? () => deleteUser.mutate(user.id) : undefined}
+        />
+      ))}
+    </div>
+  )
+}
+```
+
 ### 폼 처리
 - 폼 관리: react-hook-form
 - 스키마 검증: zod + @hookform/resolvers

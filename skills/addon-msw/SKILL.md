@@ -1,44 +1,51 @@
 ---
 name: addon-msw
-description: Mock Service Worker (MSW) 설정을 추가합니다. MSW 핸들러, 브라우저 워커 설정, Entry 파일 수정을 포함합니다.
+description: Mock Service Worker (MSW) 설정을 추가합니다. MSW 핸들러, 브라우저 워커 설정, Entry 파일 수정을 포함하며, 주석 처리된 상태로 생성됩니다.
 user-invocable: true
 ---
 
 # addon-msw
 
-Mock Service Worker (MSW) 설정을 추가합니다.
+Mock Service Worker (MSW) 설정을 추가합니다. 주석 처리된 상태로 생성됩니다.
 
-## 역할
-- MSW 핸들러 설정
-- 브라우저 워커 설정
-- Entry 파일 수정 (main.tsx 또는 layout.tsx)
+## 프로세스
 
-## 생성 파일
+### 1단계: 의존성 추가
 
-### 공통
+```bash
+npm install --prefix {project}/frontend msw --save-dev
+```
+
+### 2단계: 파일 생성
+
+[template.md](template.md) 참고하여 파일 생성:
+
+**공통:**
 - `frontend/src/mocks/handlers.ts`
 - `frontend/src/mocks/browser.ts`
-- `frontend/src/mocks/index.ts`
+- `frontend/src/mocks/index.ts` (React/Next.js 버전 구분)
 
-### React (Vite)
+**React (Vite):**
 - `frontend/src/main.tsx` (덮어쓰기)
 
-### Next.js
+**Next.js:**
 - `frontend/app/layout.tsx` (덮어쓰기)
-- `frontend/app/providers/MSWProvider.tsx`
+- `frontend/src/shared/lib/providers/index.ts` (덮어쓰기)
+- `frontend/src/shared/lib/providers/MSWProvider.tsx`
 
-## MSW 상태
+### 3단계: MSW 초기화 안내
 
-| Backend 선택 | MSW 상태 |
-|-------------|---------|
-| 사용 안함 | **활성화** (바로 사용 가능) |
-| 선택함 | **비활성화** (주석 처리, 필요 시 활성화) |
+파일 생성 완료 후 사용자에게 안내:
 
-## 템플릿
+```
+MSW 설정이 완료되었습니다.
+사용하려면 아래 명령어를 실행하세요:
 
-[template.md](template.md) - MSW 관련 파일 boilerplate
+npx msw init public --save
+
+그 후 layout.tsx (또는 main.tsx)에서 MSWProvider 주석을 해제하세요.
+```
 
 ## 사용법
 
 이 skill은 `/scaffold` 명령어에서 MSW "설정" 선택 시 자동으로 호출됩니다.
-Frontend 선택이 필수이며, `frontend/`가 이미 존재하면 호출되지 않습니다.

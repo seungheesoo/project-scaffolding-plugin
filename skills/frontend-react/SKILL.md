@@ -45,6 +45,8 @@ mkdir -p {project}/frontend/src/shared/config
 | 파일 | 설명 |
 |------|------|
 | `src/app/index.tsx` | 앱 루트 컴포넌트 |
+| `src/app/providers/index.ts` | Provider barrel |
+| `src/app/providers/QueryProvider.tsx` | React Query Provider |
 | `src/app/router/index.tsx` | 라우터 설정 |
 | `src/app/styles/global.scss` | Tailwind + CSS 변수 |
 | `src/pages/home/index.tsx` | 홈 페이지 |
@@ -82,7 +84,7 @@ rm -f {project}/frontend/src/index.css
 ### 6단계: 의존성 추가
 
 ```bash
-npm install --prefix {project}/frontend react-router-dom clsx tailwind-merge class-variance-authority lucide-react react-hook-form @hookform/resolvers zod
+npm install --prefix {project}/frontend react-router-dom zustand immer @tanstack/react-query clsx tailwind-merge class-variance-authority lucide-react react-hook-form @hookform/resolvers zod
 npm install --prefix {project}/frontend -D tailwindcss postcss autoprefixer sass tailwindcss-animate
 ```
 

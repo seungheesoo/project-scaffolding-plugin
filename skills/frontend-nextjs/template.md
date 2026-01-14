@@ -27,16 +27,36 @@ export { apiClient } from './client'
 ```typescript
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || '/api'
 
+interface ApiClientOptions extends Omit<RequestInit, 'body'> {
+  params?: Record<string, unknown>
+  body?: unknown
+}
+
 export async function apiClient<T>(
   endpoint: string,
-  options?: RequestInit
+  options?: ApiClientOptions
 ): Promise<T> {
-  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+  const { params, body, ...fetchOptions } = options ?? {}
+
+  // Query string 생성
+  const url = new URL(`${API_BASE_URL}${endpoint}`, 'http://localhost')
+  if (params) {
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+        url.searchParams.append(key, String(value))
+      }
+    })
+  }
+
+  const fetchUrl = `${API_BASE_URL}${endpoint}${url.search}`
+
+  const response = await fetch(fetchUrl, {
     headers: {
       'Content-Type': 'application/json',
-      ...options?.headers,
+      ...fetchOptions.headers,
     },
-    ...options,
+    body: body ? JSON.stringify(body) : undefined,
+    ...fetchOptions,
   })
 
   if (!response.ok) {
@@ -57,6 +77,59 @@ export async function apiClient<T>(
 ### frontend/src/shared/lib/index.ts
 ```typescript
 export { cn } from './utils'
+```
+
+### frontend/src/shared/lib/providers/index.ts
+```typescript
+export { QueryProvider } from './QueryProvider'
+```
+
+### frontend/src/shared/lib/providers/QueryProvider.tsx
+```tsx
+'use client'
+
+import {
+  QueryClient,
+  QueryClientProvider,
+  QueryCache,
+  MutationCache,
+} from '@tanstack/react-query'
+import { ReactNode, useState } from 'react'
+
+export function QueryProvider({ children }: { children: ReactNode }) {
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        queryCache: new QueryCache({
+          onError: (error, query) => {
+            console.error('[Query Error]', {
+              queryKey: query.queryKey,
+              error: error.message,
+            })
+          },
+        }),
+        mutationCache: new MutationCache({
+          onError: (error, variables, context, mutation) => {
+            console.error('[Mutation Error]', {
+              mutationKey: mutation.options.mutationKey,
+              variables,
+              error: error.message,
+            })
+          },
+        }),
+        defaultOptions: {
+          queries: {
+            staleTime: 60 * 1000,
+            retry: 1,
+          },
+        },
+      })
+  )
+
+  return (
+    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+  )
+}
 ```
 
 ### frontend/src/shared/lib/utils.ts
@@ -313,12 +386,29 @@ plugins: [tailwindcssAnimate],
 
 ### app/layout.tsx
 
-파일을 읽고 CSS import 문을 찾아서 변경:
+파일을 읽고 아래 수정사항을 적용:
 
+**1. CSS import 문 변경:**
 ```tsx
 // 기존 (패턴: './globals.css' 또는 './global.css' 등)
 import './globals.css'
 
 // 변경
 import '@shared/styles/global.scss'
+```
+
+**2. QueryProvider import 추가:**
+```tsx
+import { QueryProvider } from '@shared/lib/providers'
+```
+
+**3. body 내부를 QueryProvider로 감싸기:**
+```tsx
+// 기존
+<body className={...}>{children}</body>
+
+// 변경
+<body className={...}>
+  <QueryProvider>{children}</QueryProvider>
+</body>
 ```

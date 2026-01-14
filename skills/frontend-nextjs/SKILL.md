@@ -46,6 +46,8 @@ mkdir -p {project}/frontend/src/shared/config
 | `src/shared/api/client.ts` | API 클라이언트 |
 | `src/shared/ui/index.ts` | UI 컴포넌트 export |
 | `src/shared/lib/index.ts` | 유틸리티 export |
+| `src/shared/lib/providers/index.ts` | Provider barrel |
+| `src/shared/lib/providers/QueryProvider.tsx` | React Query Provider |
 | `src/shared/lib/utils.ts` | cn 함수 |
 | `src/shared/styles/global.scss` | Tailwind + CSS 변수 |
 | `app/loading.tsx` | 로딩 UI |
@@ -76,7 +78,7 @@ rm -f {project}/frontend/app/global.css
 ### 6단계: 의존성 추가
 
 ```bash
-npm install --prefix {project}/frontend clsx tailwind-merge class-variance-authority lucide-react react-hook-form @hookform/resolvers zod
+npm install --prefix {project}/frontend zustand immer @tanstack/react-query clsx tailwind-merge class-variance-authority lucide-react react-hook-form @hookform/resolvers zod
 npm install --prefix {project}/frontend -D sass tailwindcss-animate
 ```
 

@@ -112,7 +112,7 @@ questions:
     condition: Frontend != "사용 안함"
     options:
       - label: "MSW 설정"
-        description: "Mock Service Worker로 API 모킹 환경 구성 (Backend 선택 시 disabled 상태로 생성)"
+        description: "Mock Service Worker로 API 모킹 환경 구성 (주석 처리 상태로 생성)"
       - label: "사용 안함"
 
   # Frontend 또는 Backend 선택 시에만 표시
@@ -204,27 +204,27 @@ Skill("project-scaffolding:{skill-name}")
 
 **MSW 설정 선택 시** (`addon-msw` skill 호출):
 
-**index.ts 선택 규칙**:
-| 조건 | 생성할 섹션 |
-|-----|-----------|
-| React + Backend 사용 안함 | `## frontend/src/mocks/index.ts` |
-| React + Backend 선택 | `## frontend/src/mocks/index.ts (disabled)` |
-| Next.js + Backend 사용 안함 | `## frontend/src/mocks/index.ts (Next.js)` |
-| Next.js + Backend 선택 | `## frontend/src/mocks/index.ts (Next.js, disabled)` |
+MSW는 항상 주석 처리된 상태로 생성됩니다. 사용자가 `npx msw init public --save` 실행 후 주석을 해제합니다.
 
-**Entry 파일 덮어쓰기**:
-| 조건 | 생성할 섹션 | 덮어쓸 파일 |
-|-----|-----------|------------|
-| React + Backend 사용 안함 | `## frontend/src/main.tsx (React, MSW)` | `frontend/src/main.tsx` |
-| React + Backend 선택 | `## frontend/src/main.tsx (React, MSW, disabled)` | `frontend/src/main.tsx` |
-| Next.js + Backend 사용 안함 | `## frontend/app/layout.tsx (Next.js, MSW)` | `frontend/app/layout.tsx` |
-| Next.js + Backend 선택 | `## frontend/app/layout.tsx (Next.js, MSW, disabled)` | `frontend/app/layout.tsx` |
+**공통 파일** (항상 생성):
+- `### frontend/src/mocks/handlers.ts`
+- `### frontend/src/mocks/browser.ts`
 
-**Next.js 추가 생성** (MSWProvider 컴포넌트):
-| 조건 | 생성할 섹션 |
-|-----|-----------|
-| Next.js + Backend 사용 안함 | `## frontend/app/providers/MSWProvider.tsx (Next.js, MSW)` |
-| Next.js + Backend 선택 | `## frontend/app/providers/MSWProvider.tsx (Next.js, MSW, disabled)` |
+**프레임워크별 파일**:
+| Frontend | 생성할 섹션 |
+|----------|-----------|
+| React (Vite) | `## React (Vite)` 하위 모든 파일 |
+| Next.js | `## Next.js` 하위 모든 파일 |
+
+**React (Vite) 생성 파일**:
+- `frontend/src/mocks/index.ts`
+- `frontend/src/main.tsx` (덮어쓰기)
+
+**Next.js 생성 파일**:
+- `frontend/src/mocks/index.ts`
+- `frontend/app/layout.tsx` (덮어쓰기)
+- `frontend/src/shared/lib/providers/index.ts` (덮어쓰기)
+- `frontend/src/shared/lib/providers/MSWProvider.tsx`
 
 ### Docker 적용 규칙
 

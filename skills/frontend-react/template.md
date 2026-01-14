@@ -10,14 +10,68 @@
 ```tsx
 import { StrictMode } from 'react'
 import { RouterProvider } from 'react-router-dom'
+import { QueryProvider } from './providers'
 import { router } from './router'
 import './styles/global.scss'
 
 export function App() {
   return (
     <StrictMode>
-      <RouterProvider router={router} />
+      <QueryProvider>
+        <RouterProvider router={router} />
+      </QueryProvider>
     </StrictMode>
+  )
+}
+```
+
+### frontend/src/app/providers/index.ts
+```typescript
+export { QueryProvider } from './QueryProvider'
+```
+
+### frontend/src/app/providers/QueryProvider.tsx
+```tsx
+import {
+  QueryClient,
+  QueryClientProvider,
+  QueryCache,
+  MutationCache,
+} from '@tanstack/react-query'
+import { ReactNode, useState } from 'react'
+
+export function QueryProvider({ children }: { children: ReactNode }) {
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        queryCache: new QueryCache({
+          onError: (error, query) => {
+            console.error('[Query Error]', {
+              queryKey: query.queryKey,
+              error: error.message,
+            })
+          },
+        }),
+        mutationCache: new MutationCache({
+          onError: (error, variables, context, mutation) => {
+            console.error('[Mutation Error]', {
+              mutationKey: mutation.options.mutationKey,
+              variables,
+              error: error.message,
+            })
+          },
+        }),
+        defaultOptions: {
+          queries: {
+            staleTime: 60 * 1000,
+            retry: 1,
+          },
+        },
+      })
+  )
+
+  return (
+    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
   )
 }
 ```
@@ -131,16 +185,34 @@ export { apiClient } from './client'
 ```typescript
 const API_BASE_URL = import.meta.env.VITE_API_URL || '/api'
 
+interface ApiClientOptions extends Omit<RequestInit, 'body'> {
+  params?: Record<string, unknown>
+  body?: unknown
+}
+
 export async function apiClient<T>(
   endpoint: string,
-  options?: RequestInit
+  options?: ApiClientOptions
 ): Promise<T> {
-  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+  const { params, body, ...fetchOptions } = options ?? {}
+
+  // Query string 생성
+  const url = new URL(`${API_BASE_URL}${endpoint}`, window.location.origin)
+  if (params) {
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+        url.searchParams.append(key, String(value))
+      }
+    })
+  }
+
+  const response = await fetch(url.toString(), {
     headers: {
       'Content-Type': 'application/json',
-      ...options?.headers,
+      ...fetchOptions.headers,
     },
-    ...options,
+    body: body ? JSON.stringify(body) : undefined,
+    ...fetchOptions,
   })
 
   if (!response.ok) {
